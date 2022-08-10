@@ -1,18 +1,20 @@
 import json
+import os
 from typing import Dict
 from ortools.linear_solver import pywraplp
 from ortools.linear_solver.pywraplp import Variable
 
 class CalculateVegetableGarden:
 
-    def __init__(self, food: str = 'lettuce'):
+    def __init__(self, food: str = 'lettuce', width: int = 100, lenght: int = 200):
         self.number_of_lines: Variable = None
         self.number_of_plants: Variable = None
-        self.measurements = json.load(open('sizes.json'))
+        print(os.listdir())
+        self.measurements = json.load(open('./solvers/optimizers/sizes.json'))
         self.food_choosen_infos = self.select_food_infos(food)
         self.solver = None
-        self.width = 100 #cm
-        self.lenght = 200 #cm
+        self.width = width #cm
+        self.lenght = lenght #cm
         self.output = {
             "Lines": 0,
             "Plants": 0
