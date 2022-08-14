@@ -1,0 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+    @apply h-screen bg-gradient-to-b from-background-500 via-background-300 to-background-100
+}
