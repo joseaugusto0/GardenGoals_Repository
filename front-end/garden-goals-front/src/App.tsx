@@ -1,15 +1,16 @@
 import { useState } from 'react'
+import { DrawingArea } from './components/DrawingArea'
 import Header from './components/Header'
 
+
 function App() {
-  const [count, setCount] = useState(0)
 
   return (
-    <body>
-      <div>
+      <>
         <Header name="José"></Header>
-      </div>
-    </body>
+        <DrawingArea className="mr-2"></DrawingArea>
+        <button>Teste</button>
+      </>
   )
 }
 

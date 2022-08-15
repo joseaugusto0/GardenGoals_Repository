@@ -5,3 +5,12 @@
 body {
     @apply h-screen bg-gradient-to-b from-background-500 via-background-300 to-background-100
 }
+
+.sr-only {
+    display: none;
+}
+
+.leaflet-container {
+    height: 85vh;
+    width: 100%;
+}
