@@ -10,7 +10,7 @@ class CalculateVegetableGarden:
         self.number_of_lines: Variable = None
         self.number_of_plants: Variable = None
         print(os.listdir())
-        self.measurements = json.load(open('./solvers/optimizers/sizes.json'))
+        self.measurements = json.load(open('sizes.json'))
         self.food_choosen_infos = self.select_food_infos(food)
         self.solver = None
         self.width = width #cm
