@@ -50,6 +50,24 @@ class CalculateRectangleVegetableGarden:
     def define_plants_objetive(self):
         self.solver.Maximize(self.number_of_plants)
 
+    def calculate_plants_coordenates(self):
+        points = []
+        
+        for line_index in range(1,self.values_solved['lines'] +1):
+            if line_index==1:
+                y_distance = self.food_choosen_infos["space between plants"]/2
+            else:
+                y_distance = self.food_choosen_infos["space between plants"]/2 + line_index*self.food_choosen_infos["space between plants"]
+        for plant_index in range(1,self.values_solved['plants']+1):
+            if plant_index==1:
+                x_distance = self.food_choosen_infos["space between lines"]/2
+                points.append({"lat": x_distance, "lng": y_distance})
+            else:
+                x_distance = self.food_choosen_infos["space between lines"]/2 + plant_index*self.food_choosen_infos["space between lines"]
+                points.append({"lat": x_distance, "lng": y_distance})
+
+        return points
+
     def solve(self):
 
         self.config_solver()
@@ -60,7 +78,7 @@ class CalculateRectangleVegetableGarden:
         results_lines = self.solver.Solve()
         
         if results_lines == pywraplp.Solver.OPTIMAL:
-            self.values_solved['lines'] = self.number_of_lines.solution_value()
+            self.values_solved['lines'] = int(self.number_of_lines.solution_value())
         else:
             print('The problem does not have an optimal solution.')
             raise     
@@ -69,15 +87,16 @@ class CalculateRectangleVegetableGarden:
         results_plants = self.solver.Solve()
 
         if results_plants == pywraplp.Solver.OPTIMAL:
-            self.values_solved['plants'] = self.number_of_plants.solution_value()
+            self.values_solved['plants'] = int(self.number_of_plants.solution_value())
         else:
             print('The problem does not have an optimal solution.')
             raise
 
-        
         rectangle_optimized_builder = RectangleOptimizedBuilder()
         rectangle_optimized_builder._set_infos_from_json(self.values_solved)
         self.__input.rectangle_optimized = rectangle_optimized_builder._get_rectangle_optimized()
+
+        self.__input.rectangle_optimized.plants_coordenates = self.calculate_plants_coordenates()
         self._output = self.__input
 
     

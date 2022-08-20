@@ -1,8 +1,12 @@
 
+from typing import Dict
+
+
 class RectangleOptimized:
     def __init__(self):
         self.number_of_lines: float = None
         self.number_of_plants: float = None
+        self.plants_coordenates: Dict = None
 
     def __repr__(self):
         res = '\n'
