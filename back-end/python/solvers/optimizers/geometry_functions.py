@@ -65,6 +65,10 @@ class GeometryFunctions:
         scale_level = 72223.822090
         self._output.width = (self._output.polygonToZero[1]['lat']-self._output.polygonToZero[0]['lat'])*scale_level
         self._output.height = (self._output.polygonToZero[3]['lng']-self._output.polygonToZero[0]['lng'])*scale_level
+    def _solve_rectangle(self):
+        self._get_polygon_to_zero()
+        self._organizing_rectangle_points()
+        self._get_width_and_height()
 
     def _set_input(self, input: Polygon):
         self.__input = input

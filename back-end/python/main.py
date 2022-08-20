@@ -12,7 +12,5 @@ polygon = polygonBuilder._get_polygon()
 
 geometryClass = GeometryFunctions()
 geometryClass._set_input(polygon)
-geometryClass._get_polygon_to_zero()
-geometryClass._organizing_rectangle_points()
-geometryClass._get_width_and_height()
+geometryClass._solve_rectangle()
 polygon = geometryClass._get_output()
