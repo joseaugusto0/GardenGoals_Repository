@@ -1,5 +1,3 @@
-import pandas as pd
-
 from typing import Dict, List
 
 class Polygon:
