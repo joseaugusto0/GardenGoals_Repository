@@ -53,16 +53,10 @@ class CalculateRectangleVegetableGarden:
     def calculate_plants_coordenates(self):
         points = []
         
-        for line_index in range(1,self.values_solved['lines'] +1):
-            if line_index==1:
-                y_distance = self.food_choosen_infos["space between plants"]/2
-            else:
-                y_distance = self.food_choosen_infos["space between plants"]/2 + line_index*self.food_choosen_infos["space between plants"]
-        for plant_index in range(1,self.values_solved['plants']+1):
-            if plant_index==1:
-                x_distance = self.food_choosen_infos["space between lines"]/2
-                points.append({"lat": x_distance, "lng": y_distance})
-            else:
+        for line_index in range(self.values_solved['lines'] +1):
+            y_distance = self.food_choosen_infos["space between plants"]/2 + line_index*self.food_choosen_infos["space between plants"]
+        
+            for plant_index in range(self.values_solved['plants']+1):
                 x_distance = self.food_choosen_infos["space between lines"]/2 + plant_index*self.food_choosen_infos["space between lines"]
                 points.append({"lat": x_distance, "lng": y_distance})
 

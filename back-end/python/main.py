@@ -3,6 +3,7 @@ from typing import Dict
 from solvers.optimizers.geometry_functions import GeometryFunctions
 from solvers.optimizers.otimization_vegetable_garden import CalculateRectangleVegetableGarden
 from entities.Polygon import PolygonBuilder
+from dao.DAOOutput import DAOOutput
 
 with open("min_input.json", "r") as input:
     min_input: Dict = json.load(input)
@@ -21,6 +22,11 @@ if polygon.polygonType=="rectangle":
     rectangleOptimizer = CalculateRectangleVegetableGarden()
     rectangleOptimizer._set_input(polygon)
     rectangleOptimizer.solve()
-    print(rectangleOptimizer.get_output())
+    polygon = rectangleOptimizer.get_output()
+
+dao_output = DAOOutput()
+dao_output._set_input(polygon)
+dao_output._visualize_rectangle_with_plants()
+
 
 

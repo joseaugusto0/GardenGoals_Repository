@@ -21,7 +21,6 @@ class RectangleOptimizedBuilder:
         self.rectangle_optimized: RectangleOptimized = RectangleOptimized()
 
     def _set_infos_from_json(self, infos: dict):
-        print(infos)
         self.rectangle_optimized.number_of_lines = infos['lines']
         self.rectangle_optimized.number_of_plants = infos['plants']
 
