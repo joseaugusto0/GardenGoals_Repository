@@ -58,7 +58,13 @@ class GeometryFunctions:
             *[coord for coord in self._output.polygonToZero if coord['lat']==0 and coord['lng']!=0],
             *[coord for coord in self._output.polygonToZero if coord['lat']!=0 and coord['lng']!=0],
             *[coord for coord in self._output.polygonToZero if coord['lat']==0 and coord['lng']!=0],
-        ])
+        ]
+
+    def _get_width_and_height(self):
+        #Fixing Google Maps Scale Level 13 : 72223.822090
+        scale_level = 72223.822090
+        self._output.width = (self._output.polygonToZero[1]['lat']-self._output.polygonToZero[0]['lat'])*scale_level
+        self._output.height = (self._output.polygonToZero[3]['lng']-self._output.polygonToZero[0]['lng'])*scale_level
 
     def _set_input(self, input: Polygon):
         self.__input = input
