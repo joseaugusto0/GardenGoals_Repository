@@ -48,6 +48,18 @@ class GeometryFunctions:
         plt.plot([x['lat'] for x in coordenates], [y['lng'] for y in coordenates], marker = "o")
         plt.show()
 
+    def _organizing_rectangle_points(self):
+        # first: origin
+        # second: down/right
+        # third: up/right
+        # fourth: up/left
+        self._output.polygonToZero = [
+            *[coord for coord in self._output.polygonToZero if coord['lat']==0 and coord['lng']==0],
+            *[coord for coord in self._output.polygonToZero if coord['lat']==0 and coord['lng']!=0],
+            *[coord for coord in self._output.polygonToZero if coord['lat']!=0 and coord['lng']!=0],
+            *[coord for coord in self._output.polygonToZero if coord['lat']==0 and coord['lng']!=0],
+        ])
+
     def _set_input(self, input: Polygon):
         self.__input = input
         self._output.polygonType = input.polygonType
