@@ -5,6 +5,9 @@ class Polygon:
         self.polygonType: str = None
         self.coordenates: List[Dict[float]]
         self.polygonToZero: List[Dict[float]] = None
+        self.width: float = None #cm
+        self.height: float = None #cm
+        self.area: float = None #cm2
 
     def __repr__(self):
         res = '\n'
