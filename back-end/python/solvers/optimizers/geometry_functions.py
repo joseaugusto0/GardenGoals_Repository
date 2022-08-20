@@ -1,5 +1,5 @@
 from typing import Dict
-from entities.Polygon import Polygon
+from entities.Polygon import Polygon, PolygonBuilder
 from matplotlib import pyplot as plt
 
 
@@ -8,7 +8,7 @@ class GeometryFunctions:
     def __init__(self):
 
         self.__input: Polygon = None
-        self._output: Polygon = None
+        self._output: Polygon = PolygonBuilder()._get_polygon()
         self._polygon_coordenates_in_zero = []
 
     def _find_point_closest_to_zero(self) -> Dict[float, float]:
@@ -39,15 +39,18 @@ class GeometryFunctions:
         for coordenate in self.__input.coordenates:
             self._polygon_coordenates_in_zero.append({"lat": coordenate['lat']-x_difference,"lng": coordenate['lng']-y_difference})
 
-        self._show_polygon(self._polygon_coordenates_in_zero)
-        self._output.polygonToZero=self._polygon_coordenates_in_zero
+        #self._show_polygon(self._polygon_coordenates_in_zero)
+
+        self._output.coordenates = self.__input.coordenates
+        self._output.polygonToZero = self._polygon_coordenates_in_zero
         
     def _show_polygon(self, coordenates: Dict):
         plt.plot([x['lat'] for x in coordenates], [y['lng'] for y in coordenates], marker = "o")
         plt.show()
 
-    def _set_input(self, input: Dict):
+    def _set_input(self, input: Polygon):
         self.__input = input
+        self._output.polygonType = input.polygonType
 
-    def _get_output(self) -> Dict:
+    def _get_output(self) -> Polygon:
         return self._output
