@@ -1,6 +1,7 @@
 import json
 from solvers.optimizers.geometry_functions import GeometryFunctions
 from entities.Coordenates import PolygonBuilder
+from entities.Polygon import PolygonBuilder
 with open("min_input.json", "r") as input:
     min_input: Dict = json.load(input)
 
