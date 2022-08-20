@@ -63,8 +63,10 @@ class GeometryFunctions:
     def _get_width_and_height(self):
         #Fixing Google Maps Scale Level 13 : 72223.822090
         scale_level = 72223.822090
-        self._output.width = (self._output.polygonToZero[1]['lat']-self._output.polygonToZero[0]['lat'])*scale_level
-        self._output.height = (self._output.polygonToZero[3]['lng']-self._output.polygonToZero[0]['lng'])*scale_level
+
+        self._output.width = (self._output.polygonToZero[2]['lat'])*scale_level
+        self._output.height = (self._output.polygonToZero[2]['lng'])*scale_level
+
     def _solve_rectangle(self):
         self._get_polygon_to_zero()
         self._organizing_rectangle_points()
