@@ -1,4 +1,5 @@
 from typing import Dict, List
+from entities.RectangleOptimized import RectangleOptimized, RectangleOptimizedBuilder
 
 class Polygon:
     def __init__(self):
@@ -8,6 +9,7 @@ class Polygon:
         self.width: float = None #cm
         self.height: float = None #cm
         self.area: float = None #cm2
+        self.rectangle_optimized:RectangleOptimized = None
 
     def __repr__(self):
         res = '\n'
