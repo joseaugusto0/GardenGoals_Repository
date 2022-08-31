@@ -1,7 +1,7 @@
 import json
 from typing import Dict
+from solvers.optimizers.optimizer_shelf_packing import ShelfPacking
 from solvers.optimizers.geometry_functions import GeometryFunctions
-from solvers.optimizers.otimization_vegetable_garden import CalculateRectangleVegetableGarden
 from entities.Polygon import PolygonBuilder
 from dao.DAOOutput import DAOOutput
 
@@ -19,7 +19,7 @@ geometryClass._solve_rectangle()
 polygon = geometryClass._get_output()
 
 if polygon.polygonType=="rectangle":
-    rectangleOptimizer = CalculateRectangleVegetableGarden()
+    rectangleOptimizer = ShelfPacking()
     rectangleOptimizer._set_input(polygon)
     rectangleOptimizer.solve()
     polygon = rectangleOptimizer.get_output()
