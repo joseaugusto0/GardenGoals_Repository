@@ -1,0 +1,33 @@
+{
+    "lettuce": {
+        "seed planting depth min": 0.635,
+        "seed planting depth max": 1.27,
+        "root depth min": 45.72,
+        "root depth max": 91.44,
+        "width min": 15.24,
+        "width max": 30.48,
+        "space between lines": 50,
+        "space between plants": 25
+    },
+    "lettuce2": {
+        "seed planting depth min": 0.635,
+        "seed planting depth max": 1.27,
+        "root depth min": 45.72,
+        "root depth max": 91.44,
+        "width min": 15.24,
+        "width max": 30.48,
+        "space between lines": 30, 
+        "space between plants": 15
+    },
+    "lettuce3": {
+        "seed planting depth min": 0.635,
+        "seed planting depth max": 1.27,
+        "root depth min": 45.72,
+        "root depth max": 91.44,
+        "width min": 15.24,
+        "width max": 30.48,
+        "space between lines": 5, 
+        "space between plants": 20
+    }
+
+}
