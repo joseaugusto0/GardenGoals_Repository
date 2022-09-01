@@ -1,9 +1,11 @@
 import json
 from typing import Dict
 from solvers.optimizers.optimizer_shelf_packing import ShelfPacking
+from solvers.optimizers.glop_rec_packing import GLOPRectanglePacking
 from solvers.optimizers.geometry_functions import GeometryFunctions
 from entities.Polygon import PolygonBuilder
 from dao.DAOOutput import DAOOutput
+
 
 with open("min_input.json", "r") as input:
     min_input: Dict = json.load(input)
