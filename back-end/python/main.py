@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 import json
 from typing import Dict
 from solvers.optimizers.geometry_functions import GeometryFunctions
@@ -28,5 +29,16 @@ dao_output = DAOOutput()
 dao_output._set_input(polygon)
 dao_output._visualize_rectangle_with_plants()
 
+=======
+from solvers.optimizers.otimization_vegetable_garden import CalculateVegetableGarden
+
+
+largura = 5000 #cm
+comprimento = 700 #cm
+
+optimizer = CalculateVegetableGarden(width=largura, lenght=comprimento)
+optimizer.solve()
+print(optimizer.get_output())
+>>>>>>> Stashed changes
 
 
