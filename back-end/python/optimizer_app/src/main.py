@@ -1,8 +1,6 @@
-<<<<<<< Updated upstream
 import json
 from typing import Dict
-from solvers.optimizers.optimizer_shelf_packing import ShelfPacking
-from solvers.optimizers.glop_rec_packing import GLOPRectanglePacking
+from solvers.optimizers.first_optimizer import ShelfPacking
 from solvers.optimizers.geometry_functions import GeometryFunctions
 from entities.Polygon import PolygonBuilder
 from dao.DAOOutput import DAOOutput
@@ -31,16 +29,9 @@ dao_output = DAOOutput()
 dao_output._set_input(polygon)
 dao_output._visualize_rectangle_with_plants()
 
-=======
-from solvers.optimizers.otimization_vegetable_garden import CalculateVegetableGarden
 
-
-largura = 5000 #cm
-comprimento = 700 #cm
-
-optimizer = CalculateVegetableGarden(width=largura, lenght=comprimento)
+optimizer = ShelfPacking()
 optimizer.solve()
 print(optimizer.get_output())
->>>>>>> Stashed changes
 
 

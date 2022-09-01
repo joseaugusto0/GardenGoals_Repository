@@ -33,7 +33,6 @@ class ShelfPacking:
         self.items_h: List[int] = None
         self.items_w: List[int] = None
         self.n_items: int = None
-        self.multiplyItems = 1
 
         #Optimizer variables
         self.xb1: List[Variable] = None
@@ -143,52 +142,48 @@ class ShelfPacking:
         self.solver.Minimize(self.z) 
 
     def solve(self):
-        while self.multiplyItems <= 100:
-            start_time = time.time()
-            self.config_solver()
-            self._get_bin_dims()
-            self.sort_desc_rectangles_by_height()
-            self._get_dims_from_items()
-            self.get_vars()
-            self.set_constraints()
+        start_time = time.time()
+        self.config_solver()
+        self._get_bin_dims()
+        self.sort_desc_rectangles_by_height()
+        self._get_dims_from_items()
+        self.get_vars()
+        self.set_constraints()
 
-            solver = cp_model.CpSolver()
-            solver.parameters.log_search_progress = True
-            rc = solver.Solve(self.solver) 
-            print(f"return code:{rc}")
-            print(f"status:{solver.StatusName()}")
+        solver = cp_model.CpSolver()
+        solver.parameters.log_search_progress = True
+        rc = solver.Solve(self.solver) 
+        print(f"return code:{rc}")
+        print(f"status:{solver.StatusName()}")
 
-            
-            if rc == 4:
-                
-                df: pandas.DataFrame = pandas.DataFrame({ 
-                    'bin' : [solver.Value(self.b[i]) for i in range(self.n_items)],
-                    'x'   : [solver.Value(self.x[i]) for i in range(self.n_items)],
-                    'y'   : [solver.Value(self.y1[i]) for i in range(self.n_items)],
-                    'w'   : self.items_w,
-                    'h'   : self.items_h,
-                    'time': (time.time() - start_time)})
-
-                df.to_csv(f"./results/sheets_results/result_{self.multiplyItems}.csv", sep=';', decimal=',')
-                _, ax = plt.subplots()
-                plt.scatter(x=self.bin_W, y=self.bin_H)
-
-                
-                for _,row in df.iterrows():
-                    
-                    if row['w']==list(*self.rectangles_ordered[0].values())[1]:
-                        color = '#0099FF'
-                    elif row['w']==list(*self.rectangles_ordered[1].values())[1]:
-                        color = '#EB70AA'
-                    elif row['w']==list(*self.rectangles_ordered[2].values())[1]:
-                        color = '#FFF000'
-                    ax.add_patch(Rectangle((row['x'], row['y']), row['w'], row['h'],edgecolor = 'black', facecolor=color))
-
-                
-                plt.savefig(f'./results/images/item_{self.multiplyItems}.png')
-            
-            self.multiplyItems += 1
         
+        if rc == 4:
+            
+            df: pandas.DataFrame = pandas.DataFrame({ 
+                'bin' : [solver.Value(self.b[i]) for i in range(self.n_items)],
+                'x'   : [solver.Value(self.x[i]) for i in range(self.n_items)],
+                'y'   : [solver.Value(self.y1[i]) for i in range(self.n_items)],
+                'w'   : self.items_w,
+                'h'   : self.items_h,
+                'time': (time.time() - start_time)})
+
+            df.to_csv(f"./results/sheets_results/result_{self.multiplyItems}.csv", sep=';', decimal=',')
+            _, ax = plt.subplots()
+            plt.scatter(x=self.bin_W, y=self.bin_H)
+
+            
+            for _,row in df.iterrows():
+                
+                if row['w']==list(*self.rectangles_ordered[0].values())[1]:
+                    color = '#0099FF'
+                elif row['w']==list(*self.rectangles_ordered[1].values())[1]:
+                    color = '#EB70AA'
+                elif row['w']==list(*self.rectangles_ordered[2].values())[1]:
+                    color = '#FFF000'
+                ax.add_patch(Rectangle((row['x'], row['y']), row['w'], row['h'],edgecolor = 'black', facecolor=color))
+
+            
+            plt.savefig(f'./results/images/item_{self.multiplyItems}.png')        
         
     def _set_input(self, input: Polygon):
         self.__input = input
