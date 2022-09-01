@@ -7,18 +7,13 @@ export class User {
     id: string;
 
     @Column()
-    garden_name: string;
+    name: string;
 
     @Column()
-    locality: string;
+    space_between_lines: number;
 
     @Column()
-    light_time: number;
-
-    @Column()
-    wanted_cultures: string[];
-
-    wanted_quantity: number;
+    space_between_plants: number;
 
     constructor(){
         if(!this.id){
