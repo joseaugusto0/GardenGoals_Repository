@@ -1,8 +1,10 @@
 import { Request, Response } from "express"
 import CreatePlantInfosService from "../services/CreatePlantInfosService";
 
-class PlantInfosController{
+class CreatePlantInfosController {
+
     async handle(request:Request, response: Response) {
+
         const {name, space_between_lines, space_between_plants} = request.body;
 
         const createPlantInfoService = new CreatePlantInfosService()
@@ -11,7 +13,6 @@ class PlantInfosController{
     
         return response.json(new_plant_infos)
     }
-
 }
 
-export default {CreatePlantInfosService}
+export {CreatePlantInfosController}
