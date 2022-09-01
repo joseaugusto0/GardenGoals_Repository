@@ -101,8 +101,8 @@ class ShelfPacking:
     def _get_dims_from_items(self):
         
         # h,w,cat for each item
-        self.items_h = [list(*food.values())[0] for food in self.rectangles_ordered for _ in range(self.multiplyItems)]
-        self.items_w = [list(*food.values())[1] for food in self.rectangles_ordered for _ in range(self.multiplyItems)]
+        self.items_h = [list(*food.values())[0] for food in self.rectangles_ordered for _ in range(50)]
+        self.items_w = [list(*food.values())[1] for food in self.rectangles_ordered for _ in range(50)]
 
         self.n_items = len(self.items_h)
         self.m = 10
