@@ -35,3 +35,5 @@ class CreatePlantInfoService {
         return new_plant
     }
 }
+
+export default CreatePlantInfoService;
