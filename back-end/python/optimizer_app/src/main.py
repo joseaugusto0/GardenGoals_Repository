@@ -1,17 +1,18 @@
 import json
 from typing import Dict
+import pandas as pd
 from solvers.optimizers.first_optimizer import ShelfPacking
 from solvers.optimizers.geometry_functions import GeometryFunctions
 from entities.Polygon import PolygonBuilder
 from dao.DAOOutput import DAOOutput
+import os
+import sys
 
-
-with open("min_input.json", "r") as input:
-    min_input: Dict = json.load(input)
+input = json.loads(sys.argv[1])
 
 
 polygonBuilder = PolygonBuilder()
-polygonBuilder._set_infos_from_json(min_input)
+polygonBuilder._set_infos_from_json(input)
 polygon = polygonBuilder._get_polygon()
 
 geometryClass = GeometryFunctions()
@@ -23,15 +24,10 @@ if polygon.polygonType=="rectangle":
     rectangleOptimizer = ShelfPacking()
     rectangleOptimizer._set_input(polygon)
     rectangleOptimizer.solve()
-    polygon = rectangleOptimizer.get_output()
-
-dao_output = DAOOutput()
-dao_output._set_input(polygon)
-dao_output._visualize_rectangle_with_plants()
+    polygon: pd.DataFrame = rectangleOptimizer.get_output()
 
 
-optimizer = ShelfPacking()
-optimizer.solve()
-print(optimizer.get_output())
+print(f"finalResult: {polygon.to_json()}")
+
 
 

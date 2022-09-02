@@ -1,10 +1,10 @@
-from ast import Dict, List, Tuple
+from ast import Dict, List
 import time
 from ortools.sat.python import cp_model
-from ortools.linear_solver import pywraplp
 from ortools.linear_solver.pywraplp import Variable
 import pandas
 import json
+import os
 from entities.Polygon import Polygon
 import matplotlib.pyplot as plt
 from matplotlib.patches import Rectangle
@@ -54,7 +54,7 @@ class ShelfPacking:
 
 
     def select_food_infos(self) -> Dict:
-        measurements = json.load(open('./solvers/optimizers/sizes.json'))
+        measurements = json.load(open(f"{os.path.dirname(os.path.abspath(__file__))}/sizes.json"))
         return measurements
 
     def _get_bin_dims(self):
@@ -101,8 +101,8 @@ class ShelfPacking:
     def _get_dims_from_items(self):
         
         # h,w,cat for each item
-        self.items_h = [list(*food.values())[0] for food in self.rectangles_ordered for _ in range(50)]
-        self.items_w = [list(*food.values())[1] for food in self.rectangles_ordered for _ in range(50)]
+        self.items_h = [list(*food.values())[0] for food in self.rectangles_ordered for _ in range(2)]
+        self.items_w = [list(*food.values())[1] for food in self.rectangles_ordered for _ in range(2)]
 
         self.n_items = len(self.items_h)
         self.m = 10
@@ -164,10 +164,9 @@ class ShelfPacking:
                 'x'   : [solver.Value(self.x[i]) for i in range(self.n_items)],
                 'y'   : [solver.Value(self.y1[i]) for i in range(self.n_items)],
                 'w'   : self.items_w,
-                'h'   : self.items_h,
-                'time': (time.time() - start_time)})
+                'h'   : self.items_h})
 
-            df.to_csv(f"./results/sheets_results/result_{self.multiplyItems}.csv", sep=';', decimal=',')
+           
             _, ax = plt.subplots()
             plt.scatter(x=self.bin_W, y=self.bin_H)
 
@@ -182,8 +181,7 @@ class ShelfPacking:
                     color = '#FFF000'
                 ax.add_patch(Rectangle((row['x'], row['y']), row['w'], row['h'],edgecolor = 'black', facecolor=color))
 
-            
-            plt.savefig(f'./results/images/item_{self.multiplyItems}.png')        
+            self._output = df      
         
     def _set_input(self, input: Polygon):
         self.__input = input
