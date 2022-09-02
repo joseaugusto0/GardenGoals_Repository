@@ -59,8 +59,8 @@ class ShelfPacking:
 
     def _get_bin_dims(self):
 
-        self.bin_H = int(self.__input.height)
-        self.bin_W = int(self.__input.width)
+        self.bin_H = int(self.__input.height*100)
+        self.bin_W = int(self.__input.width*100)
 
     def sort_desc_rectangles_by_height(self, orientation_selected: str = "height"):
         rectangles_rotated_and_desc_ordered = []

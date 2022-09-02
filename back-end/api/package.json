@@ -4,7 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "dev": "ts-node-dev --transpile-only src/server.ts",
+    "dev": "ts-node-dev src/server.ts",
     "typeorm ": "typeorm-ts-node-esm"
   },
   "devDependencies": {
@@ -14,7 +14,10 @@
     "typescript": "^4.7.4"
   },
   "dependencies": {
+    "@types/cors": "^2.8.12",
+    "cors": "^2.8.5",
     "express": "^4.18.1",
+    "python-shell": "^3.0.1",
     "reflect-metadata": "^0.1.13",
     "sqlite3": "^5.0.11",
     "typeorm": "^0.3.7",
