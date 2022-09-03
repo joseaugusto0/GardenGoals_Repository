@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { TileLayer, MapContainer, FeatureGroup, Tooltip, Rectangle, ScaleControl, useMap  } from 'react-leaflet';
-import withLeaflet from 'react-leaflet'
+import { TileLayer, MapContainer, FeatureGroup, Tooltip, Rectangle, ScaleControl} from 'react-leaflet';
 import { EditControl } from "react-leaflet-draw"
 import osm from "../osm-providers"
 import "leaflet/dist/leaflet.css";
