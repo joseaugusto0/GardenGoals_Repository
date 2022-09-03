@@ -1,6 +1,7 @@
 {
   "name": "garden-goals-front",
   "private": true,
+  "proxy": "http://localhost:3000",
   "version": "0.0.0",
   "type": "module",
   "scripts": {
@@ -10,9 +11,11 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@types/leaflet-draw": "^1.0.5",
     "axios": "^0.27.2",
     "leaflet": "^1.8.0",
     "leaflet-draw": "^1.0.4",
+    "leaflet-geometryutil": "^0.10.1",
     "patch-package": "^6.4.7",
     "phosphor-react": "^1.4.1",
     "react": "^18.2.0",

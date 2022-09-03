@@ -5,9 +5,8 @@ import osm from "../osm-providers"
 import "leaflet/dist/leaflet.css";
 import "leaflet-draw/dist/leaflet.draw.css"
 import { api } from '../lib/api';
-import L from "leaflet"
-
-import { useLeafletContext } from '@react-leaflet/core'
+import 'leaflet-geometryutil'
+import  * as L  from 'leaflet'
 
 
 
@@ -23,7 +22,6 @@ export const DrawingArea = () => {
     useEffect(() => {
         if (coords != [] && coords){
             const fetchData = async () => {
-                console.log(coords)
                 await api.post('/run_solver',coords).then((response) => set_rectangles(response))
             }
 
@@ -40,14 +38,30 @@ export const DrawingArea = () => {
     }
 
     function set_rectangles(response){
-        
-        
-        console.log(response.data)
-        console.log(coords['coordenates'])
-
         const first_coordenate = coords['coordenates'][0]
-        console.log(first_coordenate['lat'])
+        var new_coordenates = []
+        console.log(first_coordenate)
+        for (var key in response.data.x){
+            var new_point_2 = null
+            
+            var value = L.GeometryUtil.destination(first_coordenate,0,response.data.x[key]+response.data.h[key])
+            value = L.GeometryUtil.destination(value,90,response.data.y[key])
+            new_point_2 = L.GeometryUtil.destination(value,90,response.data.w[key])
+            new_point_2 = L.GeometryUtil.destination(new_point_2,180,response.data.h[key])
+            
+            //value = L.GeometryUtil.destination(first_coordenate,90,response.data.y[key]+response.data.h[key])
+            console.log(response.data.x[key],response.data.w[key])
+            console.log(value)
+            //console.log(first_coordenate.distanceTo(value))
+            //new_point_2.push(L.GeometryUtil.destination(first_coordenate,90,response.data.x[key] + response.data.w[key]))
 
+
+            //new_point_1.push(L.GeometryUtil.destination(first_coordenate,90,response.data.y[key]))
+            
+            new_coordenates.push([value,new_point_2])
+        }
+       
+        setcoordsOptimized(new_coordenates)
     }
    
     return (
@@ -65,9 +79,13 @@ export const DrawingArea = () => {
                             </FeatureGroup> 
 
                             <div>
-                                {coordsOptimized && (
-                                    coordsOptimized.map((item, index)=>{
-                                        return <Rectangle key={index} bounds={index}></Rectangle>
+                                {
+                                coordsOptimized && (
+                                    coordsOptimized.map((bounds, index)=>{
+                                        
+                                        //console.log(coordsOptimized)
+                                        return <Rectangle key={index} bounds={bounds} color='green'></Rectangle>
+
                                     })
                                 )}
                             </div>  

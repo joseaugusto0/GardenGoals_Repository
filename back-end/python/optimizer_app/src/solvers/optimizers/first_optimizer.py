@@ -59,8 +59,8 @@ class ShelfPacking:
 
     def _get_bin_dims(self):
 
-        self.bin_H = int(self.__input.height*100)
-        self.bin_W = int(self.__input.width*100)
+        self.bin_W = int(self.__input.height)
+        self.bin_H = int(self.__input.width)
 
     def sort_desc_rectangles_by_height(self, orientation_selected: str = "height"):
         rectangles_rotated_and_desc_ordered = []
@@ -101,8 +101,8 @@ class ShelfPacking:
     def _get_dims_from_items(self):
         
         # h,w,cat for each item
-        self.items_h = [list(*food.values())[0] for food in self.rectangles_ordered for _ in range(2)]
-        self.items_w = [list(*food.values())[1] for food in self.rectangles_ordered for _ in range(2)]
+        self.items_h = [list(*food.values())[0] for food in self.rectangles_ordered for _ in range(15)]
+        self.items_w = [list(*food.values())[1] for food in self.rectangles_ordered for _ in range(15)]
 
         self.n_items = len(self.items_h)
         self.m = 10
@@ -161,8 +161,8 @@ class ShelfPacking:
             
             df: pandas.DataFrame = pandas.DataFrame({ 
                 'bin' : [solver.Value(self.b[i]) for i in range(self.n_items)],
-                'x'   : [solver.Value(self.x[i]) for i in range(self.n_items)],
-                'y'   : [solver.Value(self.y1[i]) for i in range(self.n_items)],
+                'y'   : [solver.Value(self.x[i]) for i in range(self.n_items)],
+                'x'   : [solver.Value(self.y1[i]) for i in range(self.n_items)],
                 'w'   : self.items_w,
                 'h'   : self.items_h})
 
