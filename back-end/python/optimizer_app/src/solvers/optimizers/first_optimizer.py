@@ -1,5 +1,6 @@
 from ast import Dict, List
 import time
+import math
 from ortools.sat.python import cp_model
 from ortools.linear_solver.pywraplp import Variable
 import pandas
@@ -33,6 +34,8 @@ class ShelfPacking:
         self.items_h: List[int] = None
         self.items_w: List[int] = None
         self.n_items: int = None
+        self.garden_area: int = None
+        self.plant_areas: int = None
 
         #Optimizer variables
         self.xb1: List[Variable] = None
@@ -59,8 +62,9 @@ class ShelfPacking:
 
     def _get_bin_dims(self):
 
-        self.bin_W = int(self.__input.height)
-        self.bin_H = int(self.__input.width)
+        self.bin_H = int(self.__input.height)
+        self.bin_W = int(self.__input.width)
+        self.garden_area = self.bin_H*self.bin_W
 
     def sort_desc_rectangles_by_height(self, orientation_selected: str = "height"):
         rectangles_rotated_and_desc_ordered = []
@@ -99,10 +103,11 @@ class ShelfPacking:
         self.rectangles_ordered = rectangles_rotated_and_desc_ordered
 
     def _get_dims_from_items(self):
+        self.plant_areas = sum([list(*food.values())[0]*list(*food.values())[1] for food in self.rectangles_ordered])
         
         # h,w,cat for each item
-        self.items_h = [list(*food.values())[0] for food in self.rectangles_ordered for _ in range(15)]
-        self.items_w = [list(*food.values())[1] for food in self.rectangles_ordered for _ in range(15)]
+        self.items_h = [list(*food.values())[0] for food in self.rectangles_ordered for _ in range(math.floor((self.garden_area/self.plant_areas)*0.95))]
+        self.items_w = [list(*food.values())[1] for food in self.rectangles_ordered for _ in range(math.floor((self.garden_area/self.plant_areas)*0.95))]
 
         self.n_items = len(self.items_h)
         self.m = 10
@@ -152,6 +157,7 @@ class ShelfPacking:
 
         solver = cp_model.CpSolver()
         solver.parameters.log_search_progress = True
+        solver.parameters.num_search_workers = 8
         rc = solver.Solve(self.solver) 
         print(f"return code:{rc}")
         print(f"status:{solver.StatusName()}")

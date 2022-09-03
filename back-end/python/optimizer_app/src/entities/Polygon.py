@@ -26,6 +26,10 @@ class PolygonBuilder:
     def _set_infos_from_json(self, infos: dict):
         self.polygon.polygonType = infos['polygon']
         self.polygon.coordenates = infos['coordenates']
+        if width:=infos['width']:
+            self.polygon.width = width
+        if height:=infos['height']:
+            self.polygon.height = height
 
     def _get_polygon(self) -> Polygon:
         return self.polygon

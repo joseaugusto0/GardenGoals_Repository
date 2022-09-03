@@ -70,7 +70,8 @@ class GeometryFunctions:
     def _solve_rectangle(self):
         self._get_polygon_to_zero()
         self._organizing_rectangle_points()
-        self._get_width_and_height()
+        self._output.width = self.__input.width
+        self._output.height = self.__input.height
 
     def _set_input(self, input: Polygon):
         self.__input = input
