@@ -29,10 +29,12 @@ if polygon.polygonType=="rectangle":
     output_optimizer: pd.DataFrame = rectangleOptimizer.get_output()
     print(polygon)
 
-if not output_optimizer.empty:
+try:
     print(f"finalResult: {output_optimizer.to_json()}")
-else:
+except:
     print(f"{polygon}")
+
+    
 
 
 
