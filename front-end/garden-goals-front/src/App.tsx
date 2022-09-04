@@ -10,7 +10,6 @@ function App() {
       <>
         <Header name="José"></Header>
         <DrawingArea className="mr-2"></DrawingArea>
-        <Footer></Footer>
       </>
   )
 }
