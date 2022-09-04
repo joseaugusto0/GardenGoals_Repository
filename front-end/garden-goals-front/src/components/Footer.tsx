@@ -1,9 +1,30 @@
-import { FormEvent, useEffect, useState } from "react"
-import {api} from "../lib/api"
+import { ChangeEvent, Dispatch, MouseEvent, SetStateAction, useEffect, useState } from "react"
+import { AxiosResponse } from "axios"
+import { api } from "../lib/api"
+import { LatLng, GeometryUtil } from "leaflet"
 
-export const Footer = () => {
+interface iCoordsToSubmit{
+    coords: {
+        polygon: string,
+        coordenates: LatLng[],
+        width: number,
+        height: number
+    },
+    setCoordsInFront: Dispatch<SetStateAction<number[] | null>>
+}
 
-    const [plants, setPlants] = useState([])
+interface iPlantInfos{
+    name: string,
+    space_between_lines: number,
+    space_between_plants: number
+}
+
+export const Footer = ({coords, setCoordsInFront}: iCoordsToSubmit) => {
+
+    
+    var _coordsToSubmit = coords
+    const _setCoordsInFront = setCoordsInFront
+    const [plants, setPlants] = useState<string[]>([])
     const [selectedPlants, setSelectedPlants] = useState({
         dropbox0: "",
         dropbox1: "",
@@ -11,17 +32,46 @@ export const Footer = () => {
     })
 
 
-    function onChangeOption(e){
-        const id = e.target.getAttribute("id");
-        const el = document.getElementById(id);
-        setSelectedPlants(selectedPlants => ({
-            ...selectedPlants,
-            [id]: e.target.value
-        }));
+    const onChangeOption = (e: ChangeEvent<HTMLSelectElement>) => {
+        if (e.target.value!="-"){
+            const id: string = e.target.getAttribute("id");
+
+            setSelectedPlants(selectedPlants => ({
+                ...selectedPlants,
+                [id]: e.target.value
+            }));
+        }
     }
 
-    function handleSubmit(event) {
-        console.log(selectedPlants)
+    const handleSubmit = (event: MouseEvent<HTMLButtonElement>) => {
+        event.preventDefault()
+        var submitInfos = {..._coordsToSubmit, selectedPlants}
+        
+        const runSolver = async function () {
+            await api.post('/run_solver',submitInfos).then((response) => set_rectangles_in_front(response))
+        }
+        
+        runSolver()
+        console.log(submitInfos)
+    }
+
+    function set_rectangles_in_front(response: AxiosResponse){
+        
+        const first_coordenate: LatLng = _coordsToSubmit['coordenates'][0]
+        var new_coordenates: [LatLng, LatLng] | number[]= []
+
+        for (var key in response.data.x){
+            var new_point_2 = null
+
+            var value = GeometryUtil.destination(first_coordenate,90,response.data.x[key])
+            value = GeometryUtil.destination(value,0,response.data.y[key]+response.data.w[key])
+            new_point_2 = GeometryUtil.destination(value,90,response.data.h[key])
+            new_point_2 = GeometryUtil.destination(new_point_2,180,response.data.w[key])
+            
+            new_coordenates.push([value,new_point_2])
+        }
+       
+        _setCoordsInFront(new_coordenates)
     }
 
     
@@ -29,10 +79,11 @@ export const Footer = () => {
         async function fetchData() {
             const request = await api.post('/get_plant_infos')
             const body = await request.data;
-            
+            console.log(request)
             var values = ["-"]
-            body.map((plant,_) => {
-                values.push(plant.name)
+            body.map(({name,space_between_lines,space_between_plants}: iPlantInfos,_) => {
+                console.log(name)
+                values.push(name)
             })
             setPlants(values)
         }

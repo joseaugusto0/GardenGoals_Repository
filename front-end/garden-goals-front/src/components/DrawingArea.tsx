@@ -5,9 +5,7 @@ import { EditControl } from "react-leaflet-draw"
 import osm from "../osm-providers"
 import "leaflet/dist/leaflet.css";
 import "leaflet-draw/dist/leaflet.draw.css"
-import { api } from '../lib/api';
 import 'leaflet-geometryutil'
-import  * as L  from 'leaflet'
 import { Footer } from './Footer';
 
 
@@ -16,21 +14,20 @@ export const DrawingArea = () => {
 
     const [center, setCenter] = useState({lat: 24.4539, lng: 54.3773});
     let [coords, setCoords] = useState(null);
-    let [coordsOptimized, setcoordsOptimized] = useState(null);
+    let [coordsOptimized, setcoordsOptimized] = useState<number[] | null>(null);
     const [map, setMap] = useState(null)
     const [featureGroup, setFeatureGroup] = useState(null)
     const ZOOM_LEVEL = 16;
     const scaleRef = useRef(null)
 
-    useEffect(() => {
-        if (coords != [] && coords){
-            const fetchData = async () => {
-                await api.post('/run_solver',coords).then((response) => set_rectangles(response))
-            }
-
-            fetchData()
-        }
-    }, [coords])
+    //useEffect(() => {
+    //    if (coords != [] && coords){
+    //        const fetchData = async () => {
+    //            await api.post('/run_solver',coords).then((response) => set_rectangles(response))
+    //        }
+    //        fetchData()
+    //    }
+    //}, [coords])
     
     function _created(e) {
 
@@ -52,26 +49,6 @@ export const DrawingArea = () => {
         setCoords(polygon)
     }
 
-    function set_rectangles(response){
-        
-        const first_coordenate = coords['coordenates'][0]
-        var new_coordenates = []
-        var cont = 0
-
-        for (var key in response.data.x){
-            var new_point_2 = null
-
-            var value = L.GeometryUtil.destination(first_coordenate,90,response.data.x[key])
-            value = L.GeometryUtil.destination(value,0,response.data.y[key]+response.data.w[key])
-            new_point_2 = L.GeometryUtil.destination(value,90,response.data.h[key])
-            new_point_2 = L.GeometryUtil.destination(new_point_2,180,response.data.w[key])
-            
-            new_coordenates.push([value,new_point_2])
-        }
-       
-        setcoordsOptimized(new_coordenates)
-    }
-   
     return (
         <>
             <div className='row'>
@@ -82,7 +59,7 @@ export const DrawingArea = () => {
                                 
                                 <EditControl
                                     position="topright"
-                                    draw={{circlemarker: false, marker:false, polyline: false}}
+                                    draw={{circle: false, polygon: false, circlemarker: false, marker:false, polyline: false}}
                                     onCreated={(e) => {_created(e)}}
                                 />  
                                                               
@@ -106,7 +83,7 @@ export const DrawingArea = () => {
                     </div>
                 </div>
             </div>
-            <Footer></Footer>
+            <Footer coords={coords} setCoordsInFront={setcoordsOptimized}></Footer>
         
         </>
     )

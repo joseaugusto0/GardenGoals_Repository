@@ -1,36 +1,26 @@
 import AppDataSource from "../../data_source"
 import { PlantInfos } from "../entities/PlantInfos"
 
-
-interface iPlantInfoRequest{
-    names: null | string[]
-}
-
 class GetPlantInfosService{
 
-    async execute(names: iPlantInfoRequest){
+    async execute(name: null| string){
         
         const plantInfosRepository = AppDataSource.getRepository(PlantInfos)
-        var values;
-        console.log(names)
-        if (Object.keys(names).length==0){
+        console.log(name)
+        if (Object.keys(name).length==0){
             
             let queryGetAllPlantInfos = plantInfosRepository.createQueryBuilder('plant_infos').select("*")
-            values = await queryGetAllPlantInfos.getRawMany();
+            const values = await queryGetAllPlantInfos.getRawMany();
+            return values
 
         }else{
             
-            async function get_info_by_name(name, _){
-                const plantInfo = await plantInfosRepository.findOneBy({name})
-                return plantInfo
-            }
-
-            values = await Promise.all(names['plant'].map(get_info_by_name))
-
+            const value = await plantInfosRepository.findOneBy({name})
+            return value
         }
-        
-        return values        
+               
     }
+
 }
 
 export {GetPlantInfosService}

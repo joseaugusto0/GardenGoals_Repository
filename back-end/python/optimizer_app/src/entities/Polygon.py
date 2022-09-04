@@ -10,6 +10,7 @@ class Polygon:
         self.height: float = None #cm
         self.area: float = None #cm2
         self.rectangle_optimized:RectangleOptimized = None
+        self.plantsSelectedInfos: List[Dict] = []
 
     def __repr__(self):
         res = '\n'
@@ -30,6 +31,11 @@ class PolygonBuilder:
             self.polygon.width = width
         if height:=infos['height']:
             self.polygon.height = height
+
+
+        for plant in infos['plantInfos']:
+            if plant:
+                self.polygon.plantsSelectedInfos.append(plant)
 
     def _get_polygon(self) -> Polygon:
         return self.polygon

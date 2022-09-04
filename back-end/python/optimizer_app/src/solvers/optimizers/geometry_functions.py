@@ -72,6 +72,7 @@ class GeometryFunctions:
         self._organizing_rectangle_points()
         self._output.width = self.__input.width
         self._output.height = self.__input.height
+        self._output.plantsSelectedInfos = self.__input.plantsSelectedInfos
 
     def _set_input(self, input: Polygon):
         self.__input = input

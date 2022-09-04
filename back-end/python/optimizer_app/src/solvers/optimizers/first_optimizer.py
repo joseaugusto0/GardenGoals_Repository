@@ -23,7 +23,7 @@ class ShelfPacking:
         self.actives: Dict[str,Variable] = {}
         self.x = None
 
-        self.food_infos = self.select_food_infos()
+        self.food_infos = None
         self.rectangles_ordered = None
         self.areas = None
         self.solver = None
@@ -71,21 +71,22 @@ class ShelfPacking:
 
         min_height = None
         min_width = None
-        for food_name,i in self.food_infos.items():
+
+        for food_info in self.__input.plantsSelectedInfos:
 
             if not min_height and not min_width:
-                min_height = self.food_infos[food_name]["space between lines"]
-                min_width = self.food_infos[food_name]["space between plants"]
+                min_height = food_info["space_between_lines"]
+                min_width = food_info["space_between_plants"]
             else:
-                if self.food_infos[food_name]["space between lines"] < min_height:
-                    min_height = self.food_infos[food_name]["space between lines"]
-                if self.food_infos[food_name]["space between plants"] < min_width:  
-                    min_width =  self.food_infos[food_name]["space between plants"]
+                if food_info["space_between_lines"] < min_height:
+                    min_height = food_info["space_between_lines"]
+                if food_info["space_between_plants"] < min_width:  
+                    min_width =  food_info["space_between_plants"]
             
             rectangles_rotated_and_desc_ordered.append({
-                f"{food_name}": [
-                    self.food_infos[food_name]["space between lines"],
-                    self.food_infos[food_name]["space between plants"]
+                f"{food_info['name']}": [
+                    food_info["space_between_lines"],
+                    food_info["space_between_plants"]
                 ]
             })
 
@@ -100,6 +101,7 @@ class ShelfPacking:
                         rectangles_rotated_and_desc_ordered[rectangle] = rectangles_rotated_and_desc_ordered[rectangle_to_compare]
                         rectangles_rotated_and_desc_ordered[rectangle_to_compare] = aux
            
+
         self.rectangles_ordered = rectangles_rotated_and_desc_ordered
 
     def _get_dims_from_items(self):
