@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { TileLayer, MapContainer, FeatureGroup, Tooltip, Rectangle, ScaleControl } from 'react-leaflet';
 
 import { EditControl } from "react-leaflet-draw"
@@ -66,7 +66,14 @@ export const DrawingArea = () => {
                                 
                                 <EditControl
                                     position="topright"
-                                    draw={{circle: false, polygon: false, circlemarker: false, marker:false, polyline: false}}
+                                    draw={
+                                        {
+                                            polygon: false, 
+                                            circlemarker: false, 
+                                            marker:false, 
+                                            polyline: false,
+                                        }
+                                    }
                                     onCreated={(e) => {_created(e)}}
                                 />  
                                                               
