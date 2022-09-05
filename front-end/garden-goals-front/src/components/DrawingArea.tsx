@@ -7,16 +7,22 @@ import "leaflet/dist/leaflet.css";
 import "leaflet-draw/dist/leaflet.draw.css"
 import 'leaflet-geometryutil'
 import { Footer } from './Footer';
+import { LatLng } from 'leaflet';
 
 
+interface iPolygon{
+    polygon: string,
+    coordenates: LatLng[],
+    width: number,
+    height: number
+}
 
 export const DrawingArea = () => {
 
     const [center, setCenter] = useState({lat: 24.4539, lng: 54.3773});
-    let [coords, setCoords] = useState(null);
-    let [coordsOptimized, setcoordsOptimized] = useState<number[] | null>(null);
-    const [map, setMap] = useState(null)
-    const [featureGroup, setFeatureGroup] = useState(null)
+    let [coords, setCoords] = useState<any>(null);
+    let [coordsOptimized, setcoordsOptimized] = useState<any[] | null>(null);
+    const [featureGroup, setFeatureGroup] = useState<any>(null)
     const ZOOM_LEVEL = 16;
     const scaleRef = useRef(null)
 
@@ -29,7 +35,7 @@ export const DrawingArea = () => {
     //    }
     //}, [coords])
     
-    function _created(e) {
+    function _created(e: any) {
 
         //Added function to show coordenate if clicked
         if (e.layerType === 'rectangle') {
@@ -37,10 +43,11 @@ export const DrawingArea = () => {
                 console.log(e.layer.getBounds());    
             });
         }
-    
-        featureGroup.addLayer(e.layer);
-
-        const polygon = {
+        if (featureGroup){
+            featureGroup.addLayer(e.layer);
+        }
+        
+        const polygon: iPolygon = {
             polygon: e.layerType,
             coordenates: e.layer._latlngs[0],
             width: e.layer._latlngs[0][0].distanceTo(e.layer._latlngs[0][1]),
@@ -54,7 +61,7 @@ export const DrawingArea = () => {
             <div className='row'>
                 <div className='col text-center'>
                     <div className='col'>
-                        <MapContainer center={center} zoom={ZOOM_LEVEL} ref={setMap}>
+                        <MapContainer center={center} zoom={ZOOM_LEVEL}>
                             <FeatureGroup ref={setFeatureGroup}>
                                 
                                 <EditControl
