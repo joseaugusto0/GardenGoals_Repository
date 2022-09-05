@@ -34,12 +34,14 @@ export const Footer = ({coords, setCoordsInFront}: iCoordsToSubmit) => {
 
     const onChangeOption = (e: ChangeEvent<HTMLSelectElement>) => {
         if (e.target.value!="-"){
-            const id: string = e.target.getAttribute("id");
+            const id: string|null = e.target.getAttribute("id");
 
-            setSelectedPlants(selectedPlants => ({
-                ...selectedPlants,
-                [id]: e.target.value
-            }));
+            if (id){
+                setSelectedPlants(selectedPlants => ({
+                    ...selectedPlants,
+                    [id]: e.target.value
+                }));
+            }
         }
     }
 
@@ -58,12 +60,13 @@ export const Footer = ({coords, setCoordsInFront}: iCoordsToSubmit) => {
     function set_rectangles_in_front(response: AxiosResponse){
         
         const first_coordenate: LatLng = _coordsToSubmit['coordenates'][0]
-        var new_coordenates: [LatLng, LatLng] | number[]= []
+        var new_coordenates: any = [];
 
         for (var key in response.data.x){
-            var new_point_2 = null
+            var new_point_2: LatLng;
+            
 
-            var value = GeometryUtil.destination(first_coordenate,90,response.data.x[key])
+            var value: LatLng = GeometryUtil.destination(first_coordenate,90,response.data.x[key])
             value = GeometryUtil.destination(value,0,response.data.y[key]+response.data.w[key])
             new_point_2 = GeometryUtil.destination(value,90,response.data.h[key])
             new_point_2 = GeometryUtil.destination(new_point_2,180,response.data.w[key])
@@ -81,8 +84,7 @@ export const Footer = ({coords, setCoordsInFront}: iCoordsToSubmit) => {
             const body = await request.data;
             console.log(request)
             var values = ["-"]
-            body.map(({name,space_between_lines,space_between_plants}: iPlantInfos,_) => {
-                console.log(name)
+            body.map(({name,space_between_lines,space_between_plants}: iPlantInfos) => {
                 values.push(name)
             })
             setPlants(values)
