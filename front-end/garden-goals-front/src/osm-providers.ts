@@ -1,3 +1,5 @@
+import imgUrl from "./assets/black_ground.png"
+
 export default {
     maptiller: {
         url: "https://api.maptiler.com/maps/basic-v2/256/{z}/{x}/{y}.png?key=pJuYEKnCXEUFiwfR10gi",
@@ -5,7 +7,7 @@ export default {
     },
 
     custom: {
-        url: "./src/assets/black_ground.png"
+        url: imgUrl
     }
 }
 
