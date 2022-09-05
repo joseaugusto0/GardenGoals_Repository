@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "ts-node-dev src/server.ts",
     "typeorm ": "typeorm-ts-node-esm",
+    "build": "npx tsc",
     "start": "node dist/server.js"
   },
   "devDependencies": {

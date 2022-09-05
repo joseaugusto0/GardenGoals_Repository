@@ -1,4 +1,4 @@
-import  AppDataSource  from "../../data_source"
+import  AppDataSource  from "../data_source"
 import { PlantInfos } from "../entities/PlantInfos"
 
 interface IPlantInfosRequest {
