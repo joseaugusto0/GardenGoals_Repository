@@ -72,6 +72,7 @@ export const DrawingArea = () => {
                                             circlemarker: false, 
                                             marker:false, 
                                             polyline: false,
+                                            rectangle: {showArea: false}
                                         }
                                     }
                                     onCreated={(e) => {_created(e)}}
