@@ -10,7 +10,6 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@types/leaflet-draw": "^1.0.5",
     "axios": "^0.27.2",
     "leaflet": "^1.8.0",
     "leaflet-draw": "^1.0.4",
@@ -20,10 +19,11 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-leaflet": "^4.0.2",
-    "react-leaflet-draw": "^0.20.3"
+    "react-leaflet-draw": "^0.20.4"
   },
   "devDependencies": {
     "@types/leaflet": "^1.7.11",
+    "@types/leaflet-draw": "^1.0.5",
     "@types/react": "^18.0.17",
     "@types/react-dom": "^18.0.6",
     "@vitejs/plugin-react": "^2.0.1",
