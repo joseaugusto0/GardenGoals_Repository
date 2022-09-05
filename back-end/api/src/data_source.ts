@@ -1,17 +1,16 @@
 import { DataSource } from "typeorm"
-import { CreatePlantInfos1662069261633 } from "./database/migrations/1662069261633-CreatePlantInfos"
-import { PlantInfos } from "./entities/PlantInfos"
 
 
 const AppDataSource = new DataSource({
     type: "postgres",
-    url: process.env["DATABASE_URL"],
-    migrations: [CreatePlantInfos1662069261633],
-    port: parseInt(process.env["PGPORT"]),
-    username: process.env["PGUSER"],
-    password: process.env["PGPASSWORD"],
-    database: process.env["PGDATABASE"],
-    entities: [PlantInfos]
+    url: process.env.DATABASE_URL,
+    
+    port: parseInt(process.env.PGPORT),
+    username: process.env.PGUSER,
+    password: process.env.PGPASSWORD,
+    database: process.env.PGDATABASE,
+    entities: ["dist/entities/*.js"],
+    migrations: ["dist/database/migrations/*.js"],
 })
 
 AppDataSource.initialize()
