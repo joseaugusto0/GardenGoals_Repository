@@ -106,13 +106,13 @@ class ShelfPacking:
 
     def _get_dims_from_items(self):
         self.plant_areas = sum([list(*food.values())[0]*list(*food.values())[1] for food in self.rectangles_ordered])
-        
+
         # h,w,cat for each item
         self.items_h = [list(*food.values())[0] for food in self.rectangles_ordered for _ in range(math.floor((self.garden_area/self.plant_areas)*0.95))]
         self.items_w = [list(*food.values())[1] for food in self.rectangles_ordered for _ in range(math.floor((self.garden_area/self.plant_areas)*0.95))]
 
         self.n_items = len(self.items_h)
-        self.m = 10
+        self.m = 1
 
     def config_solver(self):
         self.solver = cp_model.CpModel()
