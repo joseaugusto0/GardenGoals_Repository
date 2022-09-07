@@ -2,6 +2,7 @@ import json
 from typing import Dict
 import pandas as pd
 from solvers.optimizers.first_optimizer import ShelfPacking
+from solvers.optimizers.optimizer_with_rbin_pack import RectanglePackerLibOptimizer
 from solvers.optimizers.geometry_functions import GeometryFunctions
 from entities.Polygon import PolygonBuilder
 from dao.DAOOutput import DAOOutput
@@ -23,11 +24,11 @@ polygon = geometryClass._get_output()
 
 
 if polygon.polygonType=="rectangle":
-    rectangleOptimizer = ShelfPacking()
+    rectangleOptimizer = RectanglePackerLibOptimizer()
     rectangleOptimizer._set_input(polygon)
     rectangleOptimizer.solve()
     output_optimizer: pd.DataFrame = rectangleOptimizer.get_output()
-    print(polygon)
+
 
 try:
     print(f"finalResult: {output_optimizer.to_json()}")
