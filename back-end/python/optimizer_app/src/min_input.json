@@ -1,9 +1,25 @@
 {
-    "polygon": "rectangle",
-    "coordenates": [
-        {"lat": 24.491804449471598, "lng": 54.37374114990235},
-        {"lat": 24.49493081842428, "lng": 54.37374114990235},
-        {"lat": 24.49493081842428, "lng": 54.38129425048829},
-        {"lat": 24.491804449471598, "lng": 54.38129425048829}
-    ]
-}
+	"polygon": "rectangle", 
+	"coordenates": [
+		{"lat": 24.45099610091629, "lng": 54.36929941177369}, 
+		{"lat": 24.451514079024964, "lng": 54.36929941177369}, 
+		{"lat": 24.451514079024964, "lng": 54.370796084404}, 
+		{"lat": 24.45099610091629, "lng": 54.370796084404}], 
+	"width": 157.59653779763342, 
+	"height": 151.49628995636198, 
+	"selectedPlants": {
+		"dropbox0": "Alface de inverno", "dropbox1": 
+		"Abobrinha", "dropbox2": ""}, 
+	"plantInfos": [
+		{
+			"id": "9f944e4c-5965-4134-8469-a1de34c6b3e7", 
+			"name": "Alface de inverno", 
+			"space_between_lines": 25,
+			"space_between_plants": 25
+    }, 
+    {
+        "id": "232be7de-d7d2-44fe-acf2-18393f447584", 
+        "name": "Abobrinha", 
+        "space_between_lines": 150, 
+        "space_between_plants": 100
+    }, null]}
