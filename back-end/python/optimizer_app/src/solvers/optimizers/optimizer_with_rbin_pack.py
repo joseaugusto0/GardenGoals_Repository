@@ -1,16 +1,12 @@
 from ast import Dict, List
 import time
 import math
-from unittest import result
-from ortools.sat.python import cp_model
 from ortools.linear_solver.pywraplp import Variable
 import pandas
-import json
-import os
+import inspect
 import rpack
 from entities.Polygon import Polygon
-import matplotlib.pyplot as plt
-from matplotlib.patches import Rectangle
+
 
 #---------------------------------------------------
 # data 
@@ -21,14 +17,7 @@ class RectanglePackerLibOptimizer:
         self.__input: Polygon = None
         self._output:Polygon = None
 
-        self.n_rectangles: int = 0
-        self.actives: Dict[str,Variable] = {}
-        self.x = None
-
-        self.food_infos = None
         self.rectangles_ordered = None
-        self.areas = None
-        self.solver = None
 
         #Parameters variables
         self.bin_H: int = None
@@ -110,12 +99,16 @@ class RectanglePackerLibOptimizer:
         try:
             results = rpack.pack(self.rects, self.bin_W, self.bin_H)
         except Exception as er:
-            print(er)
+            problem_inspect = inspect.getmembers(er, lambda a: not(inspect.isroutine(a)))
+            results = problem_inspect[-1][1][1]
+
+            #    print(er)
+
 
         if results:
 
             all_positions = []
-            for item_index in range(len(self.rects)):
+            for item_index in range(len(results)):
                 infos = { 
                     'time': (time.time() - start_time),
                     'y'   : results[item_index][1],
