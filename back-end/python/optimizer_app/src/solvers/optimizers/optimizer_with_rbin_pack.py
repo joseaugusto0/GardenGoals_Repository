@@ -6,6 +6,8 @@ import pandas
 import inspect
 import rpack
 from entities.Polygon import Polygon
+import matplotlib.pyplot as plt
+from matplotlib.patches import Rectangle
 
 
 #---------------------------------------------------
@@ -83,8 +85,8 @@ class RectanglePackerLibOptimizer:
         self.plant_areas = sum([food[0]*food[1] for food in rectangles_rotated_and_desc_ordered])
         
         all_rectangles = []
-        for rec_type in range(len(rectangles_rotated_and_desc_ordered)):
-            for _ in range(math.floor((self.garden_area/self.plant_areas)*0.95)):
+        for _ in range(math.floor((self.garden_area/self.plant_areas)*0.95)):
+            for rec_type in range(len(rectangles_rotated_and_desc_ordered)):
                 all_rectangles.append(rectangles_rotated_and_desc_ordered[rec_type])
         
         self.rects = all_rectangles
@@ -113,8 +115,8 @@ class RectanglePackerLibOptimizer:
                     'time': (time.time() - start_time),
                     'y'   : results[item_index][1],
                     'x'   : results[item_index][0],
-                    'h'   : self.rects[item_index][1],
-                    'w'   : self.rects[item_index][0]}
+                    'w'   : self.rects[item_index][1],
+                    'h'   : self.rects[item_index][0]}
 
                 all_positions.append(infos)
 
@@ -123,10 +125,11 @@ class RectanglePackerLibOptimizer:
             #df.to_csv(f'./solvers/optimizers/results/sheets/bin_{self.bin_dim}.csv', sep=';', decimal=',')  
 
             
-            #fig, ax = plt.subplots()
-            #plt.scatter(self.bin_W, self.bin_H)
+            fig, ax = plt.subplots()
+            plt.scatter(self.bin_W, self.bin_H)
             
             #for _,row in df.iterrows():
+            for _,row in df.iterrows():
                 
             #    if row['w']==self.rectangles_ordered[0][1]:
             #        color = '#0099FF'

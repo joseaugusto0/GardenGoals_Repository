@@ -50,8 +50,8 @@ export const DrawingArea = () => {
         const polygon: iPolygon = {
             polygon: e.layerType,
             coordenates: e.layer._latlngs[0],
-            width: e.layer._latlngs[0][0].distanceTo(e.layer._latlngs[0][1]),
-            height: e.layer._latlngs[0][1].distanceTo(e.layer._latlngs[0][2])
+            height: e.layer._latlngs[0][0].distanceTo(e.layer._latlngs[0][1]),
+            width: e.layer._latlngs[0][1].distanceTo(e.layer._latlngs[0][2])
         }
         setCoords(polygon)
     }
