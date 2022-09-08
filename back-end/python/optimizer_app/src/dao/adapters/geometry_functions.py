@@ -3,7 +3,7 @@ from entities.Polygon import Polygon, PolygonBuilder
 from matplotlib import pyplot as plt
 
 
-class GeometryFunctions:
+class RectangleFunctions:
 
     def __init__(self):
 

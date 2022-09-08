@@ -1,0 +1,25 @@
+{
+	"polygon":"circle",
+	"coordenates":{
+		"lat":24.454236895501595,
+		"lng":54.373912811279304
+	},
+	"radius":331.5466897950862,
+	"width":0,
+	"height":0,
+	"selectedPlants":{
+		"dropbox0":"Abobrinha",
+		"dropbox1":"",
+		"dropbox2":""
+	},
+	"plantInfos":[
+		{
+			"id":"54d8cb14-ad6a-4607-b929-b86086479660",
+			"name":"Abobrinha",
+			"space_between_lines":150,
+			"space_between_plants":100
+		},
+		null,
+		null
+	]
+}

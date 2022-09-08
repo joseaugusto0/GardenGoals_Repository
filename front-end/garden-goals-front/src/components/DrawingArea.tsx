@@ -41,13 +41,15 @@ export const DrawingArea = () => {
             
             const polygon: iPolygon = {
                 polygon: e.layerType,
-                coordenates: e.layer._latlngs,
+                coordenates: e.layer._latlng,
                 radius: e.layer._mRadius,
                 width: 0,
                 height: 0
             }
             setCoords(polygon)
+            console.log(e)
         }
+        
         //Added function to show coordenate if clicked
         if (e.layerType == 'rectangle') {
             e.layer.on('mouseclick', function() {

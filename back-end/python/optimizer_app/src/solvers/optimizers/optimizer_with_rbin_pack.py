@@ -129,7 +129,6 @@ class RectanglePackerLibOptimizer:
             plt.scatter(self.bin_W, self.bin_H)
             
             #for _,row in df.iterrows():
-            for _,row in df.iterrows():
                 
             #    if row['w']==self.rectangles_ordered[0][1]:
             #        color = '#0099FF'

@@ -9,6 +9,7 @@ class Polygon:
         self.width: float = None #cm
         self.height: float = None #cm
         self.area: float = None #cm2
+        self.radius: float = None
         self.rectangle_optimized:RectangleOptimized = None
         self.plantsSelectedInfos: List[Dict] = []
 
@@ -31,7 +32,7 @@ class PolygonBuilder:
             self.polygon.width = width
         if height:=infos['height']:
             self.polygon.height = height
-
+        self.polygon.radius = infos['radius']
 
         for plant in infos['plantInfos']:
             if plant:
