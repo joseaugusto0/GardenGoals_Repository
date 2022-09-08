@@ -1,14 +1,16 @@
 import { ChangeEvent, Dispatch, MouseEvent, SetStateAction, useEffect, useState } from "react"
 import { AxiosResponse } from "axios"
 import { api } from "../lib/api"
-import { LatLng, GeometryUtil } from "leaflet"
+import { LatLng } from "leaflet"
+import  GeometryUtil  from 'leaflet-geometryutil'
 
 interface iCoordsToSubmit{
     coords: {
         polygon: string,
         coordenates: LatLng[],
         width: number,
-        height: number
+        height: number,
+        radius: number
     },
     setCoordsInFront: Dispatch<SetStateAction<number[] | null>>
 }
@@ -57,15 +59,13 @@ export const Footer = ({coords, setCoordsInFront}: iCoordsToSubmit) => {
         console.log(submitInfos)
     }
 
-    function set_rectangles_in_front(response: AxiosResponse){
-        
+    function set_response_for_rectangle(response: AxiosResponse){
         const first_coordenate: LatLng = _coordsToSubmit['coordenates'][0]
         var new_coordenates: any = [];
 
         for (var key in response.data.x){
             var new_point_2: LatLng;
             
-
             var value: LatLng = GeometryUtil.destination(first_coordenate,90,response.data.x[key])
             value = GeometryUtil.destination(value,0,response.data.y[key]+response.data.w[key])
             new_point_2 = GeometryUtil.destination(value,90,response.data.h[key])
@@ -75,6 +75,40 @@ export const Footer = ({coords, setCoordsInFront}: iCoordsToSubmit) => {
         }
        
         _setCoordsInFront(new_coordenates)
+
+    }
+
+    function set_response_for_circle(response: AxiosResponse){
+        const square_circunscripted_side = (2*_coordsToSubmit.radius)/Math.sqrt(2)
+        const center_coordenate: LatLng = _coordsToSubmit['coordenates']
+        var new_coordenates: any = [];
+        var first_coordenate = GeometryUtil.destination(center_coordenate,270,square_circunscripted_side/2)
+        first_coordenate = GeometryUtil.destination(first_coordenate,180,square_circunscripted_side/2)
+
+        for (var key in response.data.x){
+            var new_point_2: LatLng;
+            
+            var value: LatLng = GeometryUtil.destination(first_coordenate,90,response.data.x[key])
+            value = GeometryUtil.destination(value,0,response.data.y[key]+response.data.w[key])
+            new_point_2 = GeometryUtil.destination(value,90,response.data.h[key])
+            new_point_2 = GeometryUtil.destination(new_point_2,180,response.data.w[key])
+            
+            new_coordenates.push([value,new_point_2])
+        }
+        
+
+        _setCoordsInFront(new_coordenates)
+
+    }
+
+    function set_rectangles_in_front(response: AxiosResponse){
+        
+        if (response.data.polygon[0]=='rectangle'){
+            set_response_for_rectangle(response)
+        }else if (response.data.polygon[0]=='circle'){
+            set_response_for_circle(response)
+        }
+        
     }
 
     

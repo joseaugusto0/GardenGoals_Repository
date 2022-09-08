@@ -112,6 +112,7 @@ class RectanglePackerLibOptimizer:
             all_positions = []
             for item_index in range(len(results)):
                 infos = { 
+                    'polygon': self.__input.polygonType,
                     'time': (time.time() - start_time),
                     'y'   : results[item_index][1],
                     'x'   : results[item_index][0],

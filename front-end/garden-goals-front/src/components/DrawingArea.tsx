@@ -7,6 +7,7 @@ import "leaflet/dist/leaflet.css";
 import "leaflet-draw/dist/leaflet.draw.css"
 import { Footer } from './Footer';
 import { LatLng } from 'leaflet';
+window.type = true;
 
 
 interface iPolygon{
