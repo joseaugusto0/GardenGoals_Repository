@@ -5,7 +5,6 @@ import { EditControl } from "react-leaflet-draw"
 import osm from "../osm-providers"
 import "leaflet/dist/leaflet.css";
 import "leaflet-draw/dist/leaflet.draw.css"
-import 'leaflet-geometryutil'
 import { Footer } from './Footer';
 import { LatLng } from 'leaflet';
 
@@ -14,7 +13,8 @@ interface iPolygon{
     polygon: string,
     coordenates: LatLng[],
     width: number,
-    height: number
+    height: number,
+    radius: number
 }
 
 export const DrawingArea = () => {
@@ -37,23 +37,39 @@ export const DrawingArea = () => {
     
     function _created(e: any) {
 
+        if (e.layerType == 'circle'){
+            
+            const polygon: iPolygon = {
+                polygon: e.layerType,
+                coordenates: e.layer._latlngs,
+                radius: e.layer._mRadius,
+                width: 0,
+                height: 0
+            }
+            setCoords(polygon)
+        }
         //Added function to show coordenate if clicked
-        if (e.layerType === 'rectangle') {
+        if (e.layerType == 'rectangle') {
             e.layer.on('mouseclick', function() {
                 console.log(e.layer.getBounds());    
             });
+
+            if (featureGroup){
+                featureGroup.addLayer(e.layer);
+            }
+
+            const polygon: iPolygon = {
+                polygon: e.layerType,
+                coordenates: e.layer._latlngs[0],
+                height: e.layer._latlngs[0][0].distanceTo(e.layer._latlngs[0][1]),
+                width: e.layer._latlngs[0][1].distanceTo(e.layer._latlngs[0][2]),
+                radius: 0
+            }
+            setCoords(polygon)
         }
-        if (featureGroup){
-            featureGroup.addLayer(e.layer);
-        }
-        
-        const polygon: iPolygon = {
-            polygon: e.layerType,
-            coordenates: e.layer._latlngs[0],
-            height: e.layer._latlngs[0][0].distanceTo(e.layer._latlngs[0][1]),
-            width: e.layer._latlngs[0][1].distanceTo(e.layer._latlngs[0][2])
-        }
-        setCoords(polygon)
+            
+
+
     }
 
     return (
@@ -71,8 +87,7 @@ export const DrawingArea = () => {
                                             polygon: false, 
                                             circlemarker: false, 
                                             marker:false, 
-                                            polyline: false,
-                                            rectangle: {showArea: false}
+                                            polyline: false
                                         }
                                     }
                                     onCreated={(e) => {_created(e)}}
