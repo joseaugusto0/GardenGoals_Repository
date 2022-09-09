@@ -37,7 +37,7 @@ class RunSolverController{
             console.log({...data,plantInfos})
             const py_options = PythonShell.defaultOptions = {
                 mode: 'text',
-                pythonPath: '../python/optimizer_app/venv/Scripts/python.exe',
+                pythonPath: 'python',
                 pythonOptions: ['-u'], // get print results in real-time
                 scriptPath: '../python/optimizer_app/src',
                 args: [JSON.stringify({...data,plantInfos})]
