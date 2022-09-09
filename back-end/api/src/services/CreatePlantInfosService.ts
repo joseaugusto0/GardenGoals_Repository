@@ -1,3 +1,4 @@
+import { response } from "express"
 import  AppDataSource  from "../data_source"
 import { PlantInfos } from "../entities/PlantInfos"
 
@@ -21,7 +22,7 @@ class CreatePlantInfoService {
         })
 
         if(plantInfoExists){
-            throw new Error("Plant already exists")
+            return "Plant already exists"
         }
 
         const new_plant = plantInfosRepository.create({
