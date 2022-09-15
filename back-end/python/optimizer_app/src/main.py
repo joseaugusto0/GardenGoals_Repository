@@ -1,7 +1,7 @@
 import json
 from typing import Dict
 import pandas as pd
-from solvers.optimizers.first_optimizer import ShelfPacking
+from solvers.optimizers.circle_bin_packing import CircleBinPacking
 from solvers.optimizers.optimizer_with_rbin_pack import RectanglePackerLibOptimizer
 from dao.adapters.geometry_functions import RectangleFunctions
 from dao.adapters.circle_functions import CircleFunctions
@@ -10,7 +10,10 @@ from dao.DAOOutput import DAOOutput
 import os
 import sys
 
-input = json.loads(sys.argv[1])
+#input = json.loads(sys.argv[1])
+
+with open('min_input_circle.json', 'r') as f:
+    input = json.load(f)
 
 
 polygonBuilder = PolygonBuilder()
@@ -29,12 +32,8 @@ if polygon.polygonType=="rectangle":
     output_optimizer: pd.DataFrame = rectangleOptimizer.get_output()
 
 if polygon.polygonType=="circle":
-    circleFuncions = CircleFunctions()
-    circleFuncions._set_input(polygon)
-    circleFuncions._solve_circle()
-    polygon = circleFuncions._get_output()
 
-    rectangleOptimizer = RectanglePackerLibOptimizer()
+    rectangleOptimizer = CircleBinPacking()
     rectangleOptimizer._set_input(polygon)
     rectangleOptimizer.solve()
     output_optimizer: pd.DataFrame = rectangleOptimizer.get_output()
