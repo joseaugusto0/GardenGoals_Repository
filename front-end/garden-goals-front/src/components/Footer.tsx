@@ -56,9 +56,8 @@ export const Footer = ({coords, setCoordsInFront, setCirclesInFront}: iCoordsToS
         const runSolver = async function () {
             await api.post('/run_solver',submitInfos).then((response) => set_rectangles_in_front(response))
         }
-        
+
         runSolver()
-        console.log(submitInfos)
     }
 
     function set_response_for_rectangle(response: AxiosResponse){
@@ -132,11 +131,16 @@ export const Footer = ({coords, setCoordsInFront, setCirclesInFront}: iCoordsToS
     }
 
     function set_rectangles_in_front(response: AxiosResponse){
-        
+        console.log(response.data)
         if (response.data.polygon[0]=='rectangle'){
             set_response_for_rectangle(response)
         }else if (response.data.polygon[0]=='circle'){
-            set_response_for_circle_with_circle(response)
+            if (response.data.optimizer_type[0]=="circle_packing"){
+                set_response_for_circle_with_circle(response)
+            }else{
+                set_response_for_circle(response)
+            }
+            
         }
         
     }

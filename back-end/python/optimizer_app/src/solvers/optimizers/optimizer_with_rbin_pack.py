@@ -113,7 +113,7 @@ class RectanglePackerLibOptimizer:
             for item_index in range(len(results)):
                 infos = { 
                     'polygon': self.__input.polygonType,
-                    'time': (time.time() - start_time),
+                    'optimizer_type': "rectangle_packing",
                     'y'   : results[item_index][1],
                     'x'   : results[item_index][0],
                     'w'   : self.rects[item_index][1],
@@ -126,8 +126,8 @@ class RectanglePackerLibOptimizer:
             #df.to_csv(f'./solvers/optimizers/results/sheets/bin_{self.bin_dim}.csv', sep=';', decimal=',')  
 
             
-            fig, ax = plt.subplots()
-            plt.scatter(self.bin_W, self.bin_H)
+            #fig, ax = plt.subplots()
+            #plt.scatter(self.bin_W, self.bin_H)
             
             #for _,row in df.iterrows():
                 

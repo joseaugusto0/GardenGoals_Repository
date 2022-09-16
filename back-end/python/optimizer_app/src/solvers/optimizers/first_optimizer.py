@@ -179,15 +179,15 @@ class ShelfPacking:
             plt.scatter(x=self.bin_W, y=self.bin_H)
 
             
-            for _,row in df.iterrows():
+            #for _,row in df.iterrows():
                 
-                if row['w']==list(*self.rectangles_ordered[0].values())[1]:
-                    color = '#0099FF'
-                elif row['w']==list(*self.rectangles_ordered[1].values())[1]:
-                    color = '#EB70AA'
-                elif row['w']==list(*self.rectangles_ordered[2].values())[1]:
-                    color = '#FFF000'
-                ax.add_patch(Rectangle((row['x'], row['y']), row['w'], row['h'],edgecolor = 'black', facecolor=color))
+            #    if row['w']==list(*self.rectangles_ordered[0].values())[1]:
+            #        color = '#0099FF'
+            #    elif row['w']==list(*self.rectangles_ordered[1].values())[1]:
+            #        color = '#EB70AA'
+             #   elif row['w']==list(*self.rectangles_ordered[2].values())[1]:
+            #        color = '#FFF000'
+            #    ax.add_patch(Rectangle((row['x'], row['y']), row['w'], row['h'],edgecolor = 'black', facecolor=color))
 
             self._output = df      
         
