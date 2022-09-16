@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import { TileLayer, MapContainer, FeatureGroup, Tooltip, Rectangle, ScaleControl } from 'react-leaflet';
+import { TileLayer, MapContainer, FeatureGroup, Tooltip, Rectangle, ScaleControl, Circle } from 'react-leaflet';
 
 import { EditControl } from "react-leaflet-draw"
 import osm from "../osm-providers"
@@ -23,6 +23,7 @@ export const DrawingArea = () => {
     const [center, setCenter] = useState({lat: 24.4539, lng: 54.3773});
     let [coords, setCoords] = useState<any>(null);
     let [coordsOptimized, setcoordsOptimized] = useState<any[] | null>(null);
+    let [circlesOptimized, setcirclesOptimized] = useState<any[] | null>(null);
     const [featureGroup, setFeatureGroup] = useState<any>(null)
     const ZOOM_LEVEL = 16;
     const scaleRef = useRef(null)
@@ -106,6 +107,14 @@ export const DrawingArea = () => {
 
                                     })
                                 )}
+                                {
+                                circlesOptimized && (
+                                    circlesOptimized['coordenates'].map((coords, index)=>{
+                                       
+                                        return <Circle key={index} center={[coords['lat'],coords['lng']]} radius={circlesOptimized['radius'][index]}></Circle>
+
+                                    })
+                                )}
                             </div>  
 
                             <ScaleControl ref={scaleRef}></ScaleControl>
@@ -116,7 +125,7 @@ export const DrawingArea = () => {
                     </div>
                 </div>
             </div>
-            <Footer coords={coords} setCoordsInFront={setcoordsOptimized}></Footer>
+            <Footer coords={coords} setCoordsInFront={setcoordsOptimized} setCirclesInFront={setcirclesOptimized}></Footer>
         
         </>
     )

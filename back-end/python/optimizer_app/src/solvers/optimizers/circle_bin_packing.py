@@ -90,9 +90,9 @@ class CircleBinPacking:
         self.rectangles_ordered = rectangles_rotated_and_desc_ordered
 
     def _get_dims_from_items(self):
-        self.plant_areas = sum([math.pi*list(*food.values())[1]**2 for food in self.rectangles_ordered])
+        self.plant_areas = sum([math.pi*(list(*food.values())[1]/2)**2 for food in self.rectangles_ordered])
         self.garden_area = math.pi*(self.__input.radius**2)
-        
+
         self.items_radius = [int(list(*food.values())[1]/2) for food in self.rectangles_ordered for _ in range(math.floor((self.garden_area/self.plant_areas)*0.7))]
         self.n_items = len(self.items_radius)
 
@@ -127,7 +127,7 @@ class CircleBinPacking:
                 )
                 self.solver.addConstr(
                     (self.x[i])**2 + (self.y[i])**2
-                    <= (self.__input.radius/2 - self.items_radius[i])**2
+                    <= (self.__input.radius - self.items_radius[i])**2
                 )
 
 
@@ -143,6 +143,7 @@ class CircleBinPacking:
         if self.solver.getVars():
 
             df: pandas.DataFrame = pandas.DataFrame({
+                'polygon': self.__input.polygonType,
                 'x': [i.x for i in self.x],
                 'y': [i.x for i in self.y],
                 'item_radius': [i for i in self.items_radius],

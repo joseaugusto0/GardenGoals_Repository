@@ -12,7 +12,8 @@ interface iCoordsToSubmit{
         height: number,
         radius: number
     },
-    setCoordsInFront: Dispatch<SetStateAction<number[] | null>>
+    setCoordsInFront: Dispatch<SetStateAction<number[] | null>>,
+    setCirclesInFront: Dispatch<SetStateAction<number[] | null>>
 }
 
 interface iPlantInfos{
@@ -21,11 +22,12 @@ interface iPlantInfos{
     space_between_plants: number
 }
 
-export const Footer = ({coords, setCoordsInFront}: iCoordsToSubmit) => {
+export const Footer = ({coords, setCoordsInFront, setCirclesInFront}: iCoordsToSubmit) => {
 
     
     var _coordsToSubmit = coords
     const _setCoordsInFront = setCoordsInFront
+    const _setCirclesInFront = setCirclesInFront
     const [plants, setPlants] = useState<string[]>([])
     const [selectedPlants, setSelectedPlants] = useState({
         dropbox0: "",
@@ -75,7 +77,35 @@ export const Footer = ({coords, setCoordsInFront}: iCoordsToSubmit) => {
         }
        
         _setCoordsInFront(new_coordenates)
+    }
 
+    function set_response_for_circle_with_circle(response: AxiosResponse){
+
+        var first_coordenate: LatLng = _coordsToSubmit['coordenates']
+        var new_coordenates: any = [];
+        var radius: any = [];
+
+        for (var key in response.data.x){
+            var x: LatLng;
+            var y: LatLng;
+            x = GeometryUtil.destination(first_coordenate,90,response.data.x[key])
+            y = GeometryUtil.destination(x,180,response.data.y[key])
+
+            new_coordenates.push(y)
+            radius.push(response.data.item_radius[key])
+
+            //var value: LatLng = GeometryUtil.destination(first_coordenate,90,response.data.x[key])
+            //value = GeometryUtil.destination(value,0,response.data.y[key]+response.data.w[key])
+            //new_point_2 = GeometryUtil.destination(value,90,response.data.h[key])
+            //new_point_2 = GeometryUtil.destination(new_point_2,180,response.data.w[key])
+        }
+        
+        var infos ={
+            'coordenates': new_coordenates,
+            'radius': radius
+        }
+        console.log(response.data)
+        _setCirclesInFront(infos)
     }
 
     function set_response_for_circle(response: AxiosResponse){
@@ -106,7 +136,7 @@ export const Footer = ({coords, setCoordsInFront}: iCoordsToSubmit) => {
         if (response.data.polygon[0]=='rectangle'){
             set_response_for_rectangle(response)
         }else if (response.data.polygon[0]=='circle'){
-            set_response_for_circle(response)
+            set_response_for_circle_with_circle(response)
         }
         
     }

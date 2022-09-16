@@ -10,10 +10,10 @@ from dao.DAOOutput import DAOOutput
 import os
 import sys
 
-#input = json.loads(sys.argv[1])
+input = json.loads(sys.argv[1])
 
-with open('min_input_circle.json', 'r') as f:
-    input = json.load(f)
+#with open('min_input_circle.json', 'r') as f:
+#    input = json.load(f)
 
 
 polygonBuilder = PolygonBuilder()
