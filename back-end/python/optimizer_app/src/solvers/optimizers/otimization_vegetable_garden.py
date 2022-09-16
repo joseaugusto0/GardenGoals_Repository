@@ -4,24 +4,23 @@ from typing import Dict
 from ortools.linear_solver import pywraplp
 from ortools.linear_solver.pywraplp import Variable
 from entities.Polygon import Polygon
-from entities.RectangleOptimized import RectangleOptimizedBuilder
+import pandas as pd
 
 class CalculateRectangleVegetableGarden:
 
-    def __init__(self, food: str = 'lettuce'):
+    def __init__(self):
         self.__input: Polygon = None
         self._output:Polygon = None
         
         self.number_of_lines: Variable = None
         self.number_of_plants: Variable = None
 
-        self.food_choosen_infos = self.select_food_infos(food)
+        self.food_choosen_infos = None
         self.values_solved = {"lines": 0, "plants": 0}
         self.solver = None
         
-    def select_food_infos(self, food: str) -> Dict:
-        measurements = json.load(open('./solvers/optimizers/sizes.json'))
-        return measurements[food]
+    def select_food_infos(self) -> Dict:
+        return self.__input.plantsSelectedInfos[0]
 
     def config_solver(self, solver_type: str = "GLOP"):
         self.solver = pywraplp.Solver.CreateSolver(solver_type)   
@@ -33,15 +32,13 @@ class CalculateRectangleVegetableGarden:
     def optimization_rules(self):
 
         #Defining rule to number of lines
-        reference = self.food_choosen_infos["width max"]*.85 if self.food_choosen_infos["width max"]>self.food_choosen_infos["space between lines"] else self.food_choosen_infos["space between lines"]
         self.solver.Add(
-            self.number_of_lines * reference <= self.__input.width
+            self.number_of_lines * self.food_choosen_infos["space_between_lines"] <= self.__input.width
         )
 
         #Defining rule to number of plants
-        reference = self.food_choosen_infos["width max"]*.85 if self.food_choosen_infos["width max"]>self.food_choosen_infos["space between plants"] else self.food_choosen_infos["space between plants"]
         self.solver.Add(
-            self.number_of_plants * reference <= self.__input.height
+            self.number_of_plants * self.food_choosen_infos["space_between_plants"] <= self.__input.height
         )
 
     def define_lines_objetive(self):
@@ -50,20 +47,43 @@ class CalculateRectangleVegetableGarden:
     def define_plants_objetive(self):
         self.solver.Maximize(self.number_of_plants)
 
-    def calculate_plants_coordenates(self):
+    def calculate_plants_coordenates_lat_lng(self):
         points = []
         
         for line_index in range(self.values_solved['lines'] +1):
-            y_distance = self.food_choosen_infos["space between plants"]/2 + line_index*self.food_choosen_infos["space between plants"]
+            y_distance = self.food_choosen_infos["space_between_plants"]/2 + line_index*self.food_choosen_infos["space_between_plants"]
         
             for plant_index in range(self.values_solved['plants']+1):
-                x_distance = self.food_choosen_infos["space between lines"]/2 + plant_index*self.food_choosen_infos["space between lines"]
+                x_distance = self.food_choosen_infos["space_between_lines"]/2 + plant_index*self.food_choosen_infos["space_between_lines"]
                 points.append({"lat": x_distance, "lng": y_distance})
 
         return points
 
-    def solve(self):
+    def calculate_plants_coordenates_x_y(self):
+        x_coordenates = []
+        y_coordenates = []
+        w = []
+        h =[]
+        for i in range(self.values_solved['lines']):
+            
+            for j in range(self.values_solved['plants']):
+                x_coordenates.append(j*self.food_choosen_infos['space_between_plants'])
+                y_coordenates.append(i*self.food_choosen_infos['space_between_lines'])
+                w.append(self.food_choosen_infos['space_between_plants'])
+                h.append(self.food_choosen_infos['space_between_lines'])
+        df: pd.DataFrame = pd.DataFrame({
+                'polygon': self.__input.polygonType,
+                'x'   : y_coordenates,
+                'y'   : x_coordenates,
+                'w'   : w,
+                'h'   : h})
 
+        #df.to_csv(f'../results/firstOptimizer/{int(self.__input.width)}.csv', sep=';', decimal=',')
+        return df
+
+    def solve(self):
+        self.food_choosen_infos = self.select_food_infos()
+ 
         self.config_solver()
         self.create_variables()
         self.optimization_rules()
@@ -85,13 +105,10 @@ class CalculateRectangleVegetableGarden:
         else:
             print('The problem does not have an optimal solution.')
             raise
+        df = self.calculate_plants_coordenates_x_y()
+        print(self.values_solved)
+        self._output = df
 
-        rectangle_optimized_builder = RectangleOptimizedBuilder()
-        rectangle_optimized_builder._set_infos_from_json(self.values_solved)
-        self.__input.rectangle_optimized = rectangle_optimized_builder._get_rectangle_optimized()
-
-        self.__input.rectangle_optimized.plants_coordenates = self.calculate_plants_coordenates()
-        self._output = self.__input
 
     
     def _set_input(self, input: Polygon):
