@@ -108,8 +108,8 @@ class ShelfPacking:
         self.plant_areas = sum([list(*food.values())[0]*list(*food.values())[1] for food in self.rectangles_ordered])
 
         # h,w,cat for each item
-        self.items_h = [list(*food.values())[0] for food in self.rectangles_ordered for _ in range(math.floor((self.garden_area/self.plant_areas)*0.95))]
-        self.items_w = [list(*food.values())[1] for food in self.rectangles_ordered for _ in range(math.floor((self.garden_area/self.plant_areas)*0.95))]
+        self.items_h = [list(*food.values())[0] for food in self.rectangles_ordered for _ in range(math.floor((self.garden_area/self.plant_areas)*0.8))]
+        self.items_w = [list(*food.values())[1] for food in self.rectangles_ordered for _ in range(math.floor((self.garden_area/self.plant_areas)*0.8))]
 
         self.n_items = len(self.items_h)
         self.m = 1
@@ -168,11 +168,11 @@ class ShelfPacking:
         if rc == 4:
             
             df: pandas.DataFrame = pandas.DataFrame({ 
-                'bin' : [solver.Value(self.b[i]) for i in range(self.n_items)],
-                'y'   : [solver.Value(self.x[i]) for i in range(self.n_items)],
-                'x'   : [solver.Value(self.y1[i]) for i in range(self.n_items)],
-                'w'   : self.items_w,
-                'h'   : self.items_h})
+                'polygon': self.__input.polygonType,
+                'x'   : [solver.Value(self.x[i]) for i in range(self.n_items)],
+                'y'   : [solver.Value(self.y1[i]) for i in range(self.n_items)],
+                'h'   : self.items_w,
+                'w'   : self.items_h})
 
            
             _, ax = plt.subplots()
