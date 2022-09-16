@@ -1,12 +1,8 @@
 from ast import Dict, List
 import time
 import math
-from ortools.sat.python import cp_model
-from ortools.linear_solver import pywraplp
 from ortools.linear_solver.pywraplp import Variable
 import pandas
-import json
-import os
 from entities.Polygon import Polygon
 import matplotlib.pyplot as plt
 from matplotlib.patches import Circle
@@ -31,10 +27,6 @@ class CircleBinPacking:
         self.solver: Model = None
 
         #Parameters variables
-        self.bin_H: int = None
-        self.bin_W: int = None
-        self.items_h: List[int] = None
-        self.items_w: List[int] = None
         self.n_items: int = None
         self.garden_area: int = None
         self.plant_areas: int = None
@@ -43,13 +35,8 @@ class CircleBinPacking:
         self.x: List[Variable] = None
         self.y: List[Variable] = None
 
-        #Optimizer variable - Objective
-        self.z: List[Variable] = None
-
         #Optimizer variables - Output
         self.b: List[Variable] = None #Bin numbers
-        self.x: List[Variable] = None #X coordenates numbers
-        self.y1: List[Variable] = None #Y coordenates numbers
 
     def sort_desc_rectangles_by_height(self, orientation_selected: str = "height"):
         rectangles_rotated_and_desc_ordered = []
@@ -144,6 +131,7 @@ class CircleBinPacking:
 
             df: pandas.DataFrame = pandas.DataFrame({
                 'polygon': self.__input.polygonType,
+                'optimizer_type': 'circle_packing',
                 'x': [i.x for i in self.x],
                 'y': [i.x for i in self.y],
                 'item_radius': [i for i in self.items_radius],
@@ -168,34 +156,6 @@ class CircleBinPacking:
             self._output = df
         else:
             return False
-
-
-        
-        '''if rc == 4:
-            
-            df: pandas.DataFrame = pandas.DataFrame({ 
-                'bin' : [solver.Value(self.b[i]) for i in range(self.n_items)],
-                'y'   : [solver.Value(self.x[i]) for i in range(self.n_items)],
-                'x'   : [solver.Value(self.y1[i]) for i in range(self.n_items)],
-                'w'   : self.items_w,
-                'h'   : self.items_h})
-
-           
-            _, ax = plt.subplots()
-            plt.scatter(x=self.bin_W, y=self.bin_H)
-
-            
-            for _,row in df.iterrows():
-                
-                if row['w']==list(*self.rectangles_ordered[0].values())[1]:
-                    color = '#0099FF'
-                elif row['w']==list(*self.rectangles_ordered[1].values())[1]:
-                    color = '#EB70AA'
-                elif row['w']==list(*self.rectangles_ordered[2].values())[1]:
-                    color = '#FFF000'
-                ax.add_patch(Rectangle((row['x'], row['y']), row['w'], row['h'],edgecolor = 'black', facecolor=color))
-
-            self._output = df      '''
         
     def _set_input(self, input: Polygon):
         self.__input = input
