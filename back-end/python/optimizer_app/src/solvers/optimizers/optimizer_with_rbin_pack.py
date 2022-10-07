@@ -31,6 +31,7 @@ class RectanglePackerLibOptimizer:
         self.plant_areas: int = None
 
         self.bin_dim = 1
+        self.relax_value = 0.95
 
 
     def _get_bin_dims(self):
@@ -81,67 +82,74 @@ class RectanglePackerLibOptimizer:
 
         self.rectangles_ordered = rectangles_rotated_and_desc_ordered #(y,x)
 
-
         self.plant_areas = sum([food[0]*food[1] for food in rectangles_rotated_and_desc_ordered])
         
         all_rectangles = []
-        for _ in range(math.floor((self.garden_area/self.plant_areas)*0.95)):
-            for rec_type in range(len(rectangles_rotated_and_desc_ordered)):
+        for rec_type in range(len(rectangles_rotated_and_desc_ordered)):
+            for _ in range(math.floor((self.garden_area/self.plant_areas)*self.relax_value)):
                 all_rectangles.append(rectangles_rotated_and_desc_ordered[rec_type])
         
         self.rects = all_rectangles
 
     def solve(self):
+        tries = 0
+        resolved = False
 
-        start_time = time.time()
-        self._get_bin_dims()
-        self.sort_desc_rectangles_by_height()
-
-        results = None
-        try:
-            results = rpack.pack(self.rects, self.bin_W, self.bin_H)
-        except Exception as er:
-            problem_inspect = inspect.getmembers(er, lambda a: not(inspect.isroutine(a)))
-            results = problem_inspect[-1][1][1]
-
-            #    print(er)
-
-
-        if results:
-
-            all_positions = []
-            for item_index in range(len(results)):
-                infos = { 
-                    'polygon': self.__input.polygonType,
-                    'optimizer_type': "rectangle_packing",
-                    'y'   : results[item_index][1],
-                    'x'   : results[item_index][0],
-                    'w'   : self.rects[item_index][1],
-                    'h'   : self.rects[item_index][0]}
-
-                all_positions.append(infos)
-
-            df = pandas.DataFrame(all_positions)  
-            self._output = df
-            #df.to_csv(f'./solvers/optimizers/results/sheets/bin_{self.bin_dim}.csv', sep=';', decimal=',')  
-
-            
-            #fig, ax = plt.subplots()
-            #plt.scatter(self.bin_W, self.bin_H)
-            
-            #for _,row in df.iterrows():
+        while not resolved or tries>5:
+            start_time = time.time()
+            self._get_bin_dims()
+            self.sort_desc_rectangles_by_height()
+            print(self.rects)
+            results = None
+            try:
+                results = rpack.pack(self.rects, self.bin_W, self.bin_H)
+            except Exception as er:
+                self.relax_value *= 0.9
+                tries += 1
+                continue
+                #problem_inspect = inspect.getmembers(er, lambda a: not(inspect.isroutine(a)))
+                #results = problem_inspect[-1][1][1]
+                #results = None
+                #print(er)
+                #raise
                 
-            #    if row['w']==self.rectangles_ordered[0][1]:
-            #        color = '#0099FF'
-            #    elif row['w']==self.rectangles_ordered[1][1]:
-            #        color = '#EB70AA'
 
-            #    ax.add_patch(Rectangle((row['x'], row['y']), row['w'], row['h'],edgecolor = 'black'))
 
-            #plt.savefig(f'./solvers/optimizers/results/images/bin_{self.bin_dim}.png')
-            #plt.cla()
-            #plt.close(fig)
-            #plt.show()
+            if results:
+                resolved = True
+                all_positions = []
+                for item_index in range(len(results)):
+                    infos = { 
+                        'polygon': self.__input.polygonType,
+                        'optimizer_type': "rectangle_packing",
+                        'y'   : results[item_index][1],
+                        'x'   : results[item_index][0],
+                        'w'   : self.rects[item_index][1],
+                        'h'   : self.rects[item_index][0]}
+
+                    all_positions.append(infos)
+
+                df = pandas.DataFrame(all_positions)  
+                self._output = df
+                #df.to_csv(f'./solvers/optimizers/results/sheets/bin_{self.bin_dim}.csv', sep=';', decimal=',')  
+
+                
+                #fig, ax = plt.subplots()
+                #plt.scatter(self.bin_W, self.bin_H)
+                
+                #for _,row in df.iterrows():
+                    
+                #    if row['w']==self.rectangles_ordered[0][1]:
+                #        color = '#0099FF'
+                #    elif row['w']==self.rectangles_ordered[1][1]:
+                #        color = '#EB70AA'
+
+                #    ax.add_patch(Rectangle((row['x'], row['y']), row['w'], row['h'],edgecolor = 'black'))
+
+                #plt.savefig(f'./solvers/optimizers/results/images/bin_{self.bin_dim}.png')
+                #plt.cla()
+                #plt.close(fig)
+                #plt.show()
         
 
         
