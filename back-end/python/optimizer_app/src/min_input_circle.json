@@ -1,25 +1,30 @@
 {
 	"polygon":"circle",
 	"coordenates":{
-		"lat":24.454236895501595,
-		"lng":54.373912811279304
+		"lat":24.45225149684744,
+		"lng":54.37802731990815
 	},
-	"radius":331.5466897950862,
+	"radius":64.19664558973616,
 	"width":0,
 	"height":0,
 	"selectedPlants":{
-		"dropbox0":"Abobrinha",
-		"dropbox1":"",
+		"dropbox0":"Alho",
+		"dropbox1":"Alface de verão",
 		"dropbox2":""
 	},
 	"plantInfos":[
 		{
 			"id":"54d8cb14-ad6a-4607-b929-b86086479660",
-			"name":"Abobrinha",
-			"space_between_lines":150,
-			"space_between_plants":100
+			"name": "Alho",
+      		"space_between_lines": 25,
+      		"space_between_plants": 10
 		},
-		null,
+		{
+			"id": "a64ff051-3a96-4e49-9f37-7349a566073b",
+      		"name": "Alface de verão",
+      		"space_between_lines": 25,
+      		"space_between_plants": 25
+		},
 		null
 	]
 }
