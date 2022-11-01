@@ -86,7 +86,7 @@ class RectanglePackerLibOptimizer:
         
         all_rectangles = []
         for rec_type in range(len(rectangles_rotated_and_desc_ordered)):
-            for _ in range(math.floor((self.garden_area/self.plant_areas)*self.relax_value)):
+            for _ in range(math.ceil((self.garden_area/self.plant_areas)*self.relax_value)):
                 all_rectangles.append(rectangles_rotated_and_desc_ordered[rec_type])
         
         self.rects = all_rectangles
@@ -95,7 +95,7 @@ class RectanglePackerLibOptimizer:
         tries = 0
         resolved = False
 
-        while not resolved or tries>5:
+        while not resolved or tries>50:
             start_time = time.time()
             self._get_bin_dims()
             self.sort_desc_rectangles_by_height()
@@ -104,7 +104,7 @@ class RectanglePackerLibOptimizer:
             try:
                 results = rpack.pack(self.rects, self.bin_W, self.bin_H)
             except Exception as er:
-                self.relax_value *= 0.9
+                self.relax_value *= 0.95
                 tries += 1
                 continue
                 #problem_inspect = inspect.getmembers(er, lambda a: not(inspect.isroutine(a)))
