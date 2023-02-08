@@ -45,29 +45,12 @@ class RectanglePackerLibOptimizer:
         self.garden_area = self.bin_H*self.bin_W
 
     def sort_desc_rectangles_by_height(self, orientation_selected: str = "height"):
-        rectangles_rotated_and_desc_ordered = []
 
-        min_height = None
-        min_width = None
-
-        for food_info in self.__input.plantsSelectedInfos:
-
-            if not min_height and not min_width:
-                min_height = food_info["space_between_lines"]
-                min_width = food_info["space_between_plants"]
-            else:
-                if food_info["space_between_lines"] < min_height:
-                    min_height = food_info["space_between_lines"]
-                if food_info["space_between_plants"] < min_width:  
-                    min_width =  food_info["space_between_plants"]
-            
-            rectangles_rotated_and_desc_ordered.append((
-                    food_info["space_between_lines"],
-                    food_info["space_between_plants"]
-                )
-            )
-
-
+        rectangles_rotated_and_desc_ordered = [
+            (food_info["space_between_lines"],food_info["space_between_plants"]) 
+            for food_info in self.__input.plantsSelectedInfos]  
+        
+        
         aux = None
         for rectangle in range(len(rectangles_rotated_and_desc_ordered)-1):
             for rectangle_to_compare in range(rectangle,len(rectangles_rotated_and_desc_ordered)):
@@ -88,7 +71,7 @@ class RectanglePackerLibOptimizer:
         for rec_type in range(len(rectangles_rotated_and_desc_ordered)):
             for _ in range(math.ceil((self.garden_area/self.plant_areas)*self.relax_value)):
                 all_rectangles.append(rectangles_rotated_and_desc_ordered[rec_type])
-        
+   
         self.rects = all_rectangles
 
     def solve(self):
@@ -99,12 +82,14 @@ class RectanglePackerLibOptimizer:
             start_time = time.time()
             self._get_bin_dims()
             self.sort_desc_rectangles_by_height()
-            print(self.rects)
+
             results = None
             try:
                 results = rpack.pack(self.rects, self.bin_W, self.bin_H)
             except Exception as er:
                 self.relax_value *= 0.95
+
+                if self.relax_value <=0.5: return False
                 tries += 1
                 continue
                 #problem_inspect = inspect.getmembers(er, lambda a: not(inspect.isroutine(a)))
@@ -119,13 +104,15 @@ class RectanglePackerLibOptimizer:
                 resolved = True
                 all_positions = []
                 for item_index in range(len(results)):
+                        
                     infos = { 
                         'polygon': self.__input.polygonType,
                         'optimizer_type': "rectangle_packing",
                         'y'   : results[item_index][1],
                         'x'   : results[item_index][0],
                         'w'   : self.rects[item_index][1],
-                        'h'   : self.rects[item_index][0]}
+                        'h'   : self.rects[item_index][0]
+                        }
 
                     all_positions.append(infos)
 
