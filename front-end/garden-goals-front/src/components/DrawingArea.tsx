@@ -103,7 +103,7 @@ export const DrawingArea = () => {
                                 {
                                 coordsOptimized && (
                                     coordsOptimized.map((bounds, index)=>{
-                                        return <Rectangle key={index} bounds={bounds} color='green'></Rectangle>
+                                        return <Rectangle key={index} bounds={[bounds[0],bounds[1]]} color={bounds[2]}></Rectangle>
 
                                     })
                                 )}

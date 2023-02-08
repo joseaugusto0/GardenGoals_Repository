@@ -28,6 +28,7 @@ export const Footer = ({coords, setCoordsInFront, setCirclesInFront}: iCoordsToS
     var _coordsToSubmit = coords
     const _setCoordsInFront = setCoordsInFront
     const _setCirclesInFront = setCirclesInFront
+    const colors = ['green','red','yellow']
     const [plants, setPlants] = useState<string[]>([])
     const [selectedPlants, setSelectedPlants] = useState({
         dropbox0: "",
@@ -63,8 +64,24 @@ export const Footer = ({coords, setCoordsInFront, setCirclesInFront}: iCoordsToS
     function set_response_for_rectangle(response: AxiosResponse){
         const first_coordenate: LatLng = _coordsToSubmit['coordenates'][0]
         var new_coordenates: any = [];
+        var height, width;
+        var cont = 0;
 
         for (var key in response.data.x){
+
+            if (cont == 0){
+                height = response.data.h[key]
+                width = response.data.w[key]
+                cont+=1
+            }else{
+                if(response.data.h[key]!=height || response.data.w[key]!=width){
+                    height = response.data.h[key]
+                    width = response.data.w[key]
+                    console.log("Mudou")
+                    cont += 1
+                }
+            }
+
             var new_point_2: LatLng;
             
             var value: LatLng = GeometryUtil.destination(first_coordenate,90,response.data.x[key])
@@ -72,9 +89,9 @@ export const Footer = ({coords, setCoordsInFront, setCirclesInFront}: iCoordsToS
             new_point_2 = GeometryUtil.destination(value,90,response.data.h[key])
             new_point_2 = GeometryUtil.destination(new_point_2,180,response.data.w[key])
             
-            new_coordenates.push([value,new_point_2])
+            new_coordenates.push([value,new_point_2,colors[cont-1]])
+            
         }
-       
         _setCoordsInFront(new_coordenates)
     }
 
@@ -93,17 +110,13 @@ export const Footer = ({coords, setCoordsInFront, setCirclesInFront}: iCoordsToS
             new_coordenates.push(y)
             radius.push(response.data.item_radius[key])
 
-            //var value: LatLng = GeometryUtil.destination(first_coordenate,90,response.data.x[key])
-            //value = GeometryUtil.destination(value,0,response.data.y[key]+response.data.w[key])
-            //new_point_2 = GeometryUtil.destination(value,90,response.data.h[key])
-            //new_point_2 = GeometryUtil.destination(new_point_2,180,response.data.w[key])
         }
         
         var infos ={
             'coordenates': new_coordenates,
             'radius': radius
         }
-        console.log(response.data)
+
         _setCirclesInFront(infos)
     }
 
