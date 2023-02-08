@@ -77,7 +77,6 @@ export const Footer = ({coords, setCoordsInFront, setCirclesInFront}: iCoordsToS
                 if(response.data.h[key]!=height || response.data.w[key]!=width){
                     height = response.data.h[key]
                     width = response.data.w[key]
-                    console.log("Mudou")
                     cont += 1
                 }
             }
@@ -100,8 +99,21 @@ export const Footer = ({coords, setCoordsInFront, setCirclesInFront}: iCoordsToS
         var first_coordenate: LatLng = _coordsToSubmit['coordenates']
         var new_coordenates: any = [];
         var radius: any = [];
+        var radius;
+        var cont = 0;
 
         for (var key in response.data.x){
+
+            if (cont == 0){
+                radius = response.data.item_radius[key]
+                cont+=1
+            }else{
+                if(response.data.item_radius[key]!=radius){
+                    radius = response.data.item_radius[key]
+                    cont += 1
+                }
+            }
+
             var x: LatLng;
             var y: LatLng;
             x = GeometryUtil.destination(first_coordenate,90,response.data.x[key])
@@ -124,18 +136,34 @@ export const Footer = ({coords, setCoordsInFront, setCirclesInFront}: iCoordsToS
         const square_circunscripted_side = (2*_coordsToSubmit.radius)/Math.sqrt(2)
         const center_coordenate: LatLng = _coordsToSubmit['coordenates']
         var new_coordenates: any = [];
+
+        var height, width;
+        var cont = 0;
+
         var first_coordenate = GeometryUtil.destination(center_coordenate,270,square_circunscripted_side/2)
         first_coordenate = GeometryUtil.destination(first_coordenate,180,square_circunscripted_side/2)
 
         for (var key in response.data.x){
             var new_point_2: LatLng;
+
+            if (cont == 0){
+                height = response.data.h[key]
+                width = response.data.w[key]
+                cont+=1
+            }else{
+                if(response.data.h[key]!=height || response.data.w[key]!=width){
+                    height = response.data.h[key]
+                    width = response.data.w[key]
+                    cont += 1
+                }
+            }
             
             var value: LatLng = GeometryUtil.destination(first_coordenate,90,response.data.x[key])
             value = GeometryUtil.destination(value,0,response.data.y[key]+response.data.w[key])
             new_point_2 = GeometryUtil.destination(value,90,response.data.h[key])
             new_point_2 = GeometryUtil.destination(new_point_2,180,response.data.w[key])
             
-            new_coordenates.push([value,new_point_2])
+            new_coordenates.push([value,new_point_2, colors[cont-1]])
         }
         
 
